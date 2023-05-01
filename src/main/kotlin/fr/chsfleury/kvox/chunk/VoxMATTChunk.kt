@@ -1,16 +1,16 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.mat.VLVoxOldMaterial
 import com.scs.voxlib.mat.VLVoxOldMaterialProperty
 import com.scs.voxlib.mat.VLVoxOldMaterialType
 import fr.chsfleury.kvox.InvalidVoxException
+import fr.chsfleury.kvox.material.VoxOldMaterial
 import fr.chsfleury.kvox.utils.StreamUtils.readFloatLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import java.io.IOException
 import java.io.InputStream
 
 class VoxMATTChunk(
-    val material: VLVoxOldMaterial
+    val material: VoxOldMaterial
 ): VoxChunk(ChunkFactory.MATT) {
 
     companion object {
@@ -35,7 +35,7 @@ class VoxMATTChunk(
                 }
             }
             return try {
-                val material = VLVoxOldMaterial(id, weight, matType, properties, isTotalPower)
+                val material = VoxOldMaterial(id, weight, matType, properties, isTotalPower)
                 VoxMATTChunk(material)
             } catch (e: IllegalArgumentException) {
                 throw InvalidVoxException("Material with ID $id is invalid", e)

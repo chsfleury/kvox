@@ -3,8 +3,8 @@ package fr.chsfleury.kvox.chunk
 import com.scs.voxlib.VLGridPoint3
 import com.scs.voxlib.VLVoxModelBlueprint
 import com.scs.voxlib.VLVoxModelInstance
-import com.scs.voxlib.mat.VLVoxOldMaterial
 import fr.chsfleury.kvox.material.VoxMaterial
+import fr.chsfleury.kvox.material.VoxOldMaterial
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -15,7 +15,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     private val chunkModelInstances = mutableListOf<VLVoxModelInstance>()
     private var chunkPalette: IntArray = VoxRGBAChunk.DEFAULT_PALETTE
     private val chunkMaterials = mutableMapOf<Int, VoxMaterial>()
-    private val oldMaterials = mutableMapOf<Int, VLVoxOldMaterial>()
+    private val oldMaterials = mutableMapOf<Int, VoxOldMaterial>()
     private val shapeChunks = mutableMapOf<Int, VoxShapeChunk>()
     private val transformChunks = mutableMapOf<Int, VoxTransformChunk>()
     private val groupChunks = mutableMapOf<Int, VoxGroupChunk>()
