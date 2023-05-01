@@ -3,13 +3,13 @@ package com.scs;
 import com.scs.voxlib.VLVoxFile;
 import com.scs.voxlib.VLVoxWriter;
 import com.scs.voxlib.Voxel;
-import com.scs.voxlib.chunk.VoxGroupChunk;
-import com.scs.voxlib.chunk.VoxRGBAChunk;
+import com.scs.voxlib.chunk.VLVoxGroupChunk;
+import com.scs.voxlib.chunk.VLVoxRGBAChunk;
 import com.scs.voxlib.chunk.VLVoxRootChunk;
-import com.scs.voxlib.chunk.VoxShapeChunk;
-import com.scs.voxlib.chunk.VoxSizeChunk;
-import com.scs.voxlib.chunk.VoxTransformChunk;
-import com.scs.voxlib.chunk.VoxXYZIChunk;
+import com.scs.voxlib.chunk.VLVoxShapeChunk;
+import com.scs.voxlib.chunk.VLVoxSizeChunk;
+import com.scs.voxlib.chunk.VLVoxTransformChunk;
+import com.scs.voxlib.chunk.VLVoxXYZIChunk;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class CreateNewFileTest {
     @Test
     public void testCreateNewFile() throws IOException {
         // Set size of the model
-        var size = new VoxSizeChunk(3, 3, 3);
+        var size = new VLVoxSizeChunk(3, 3, 3);
 
         // Color indices that we'll use. Must be between 1..255.
         final byte ID_GREEN = 1;
@@ -39,25 +39,25 @@ public class CreateNewFileTest {
         paletteArray[ID_GREEN] = 0xFF33CC33;
         paletteArray[ID_YELLOW] = 0xFFCCCC33;
         paletteArray[ID_RED] = 0xFFCC3333;
-        var palette = new VoxRGBAChunk(paletteArray);
+        var palette = new VLVoxRGBAChunk(paletteArray);
 
         // Set voxels using the color indices.
         var voxels = new ArrayList<Voxel>();
         voxels.add(new Voxel(1, 1, 0, ID_GREEN));
         voxels.add(new Voxel(1, 1, 1, ID_YELLOW));
         voxels.add(new Voxel(1, 1, 2, ID_RED));
-        var model = new VoxXYZIChunk(voxels);
+        var model = new VLVoxXYZIChunk(voxels);
 
         // The following chunks are the necessary containers for our model:
-        var groupTransform = new VoxTransformChunk(0);
-        var group = new VoxGroupChunk(1);
-        groupTransform.child_node_id = group.id;
+        var groupTransform = new VLVoxTransformChunk(0);
+        var group = new VLVoxGroupChunk(1);
+        groupTransform.childNodeId = group.id;
 
-        var shapeTransform = new VoxTransformChunk(2);
-        var shape = new VoxShapeChunk(3);
+        var shapeTransform = new VLVoxTransformChunk(2);
+        var shape = new VLVoxShapeChunk(3);
         shape.model_ids.add(0); // id of the 1st model
-        shapeTransform.child_node_id = shape.id;
-        group.child_ids.add(shapeTransform.id);
+        shapeTransform.childNodeId = shape.id;
+        group.childIds.add(shapeTransform.id);
 
         // Assemble all our chunks under the root chunk.
         // The order of chunks is important.

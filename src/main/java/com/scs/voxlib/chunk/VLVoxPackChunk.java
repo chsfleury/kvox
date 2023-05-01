@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class VoxPackChunk extends VoxChunk {
+public final class VLVoxPackChunk extends VLVoxChunk {
     private final int modelCount;
 
-    public VoxPackChunk(int modelCount) {
-        super(ChunkFactory.PACK);
+    public VLVoxPackChunk(int modelCount) {
+        super(VLChunkFactory.PACK);
         this.modelCount = modelCount;
     }
 
-    public static VoxPackChunk read(InputStream stream) throws IOException {
+    public static VLVoxPackChunk read(InputStream stream) throws IOException {
         var modelCount = StreamUtils.readIntLE(stream);
-        return new VoxPackChunk(modelCount);
+        return new VLVoxPackChunk(modelCount);
     }
 
     int getModelCount() {

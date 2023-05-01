@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class ChunkFactory {
+public final class VLChunkFactory {
 
 	public static final String MAIN = "MAIN"; 
 	public static final String PACK = "PACK"; 
@@ -33,8 +33,8 @@ public final class ChunkFactory {
 		supportedTypes.add(LAYR);
 	}
 
-	public static VoxChunk createChunk(String type, InputStream stream, InputStream childrenStream) throws IOException {
-		VoxChunk chunk = null;
+	public static VLVoxChunk createChunk(String type, InputStream stream, InputStream childrenStream) throws IOException {
+		VLVoxChunk chunk = null;
 
 		//Settings.p("Reading type " + type);
 		
@@ -43,45 +43,45 @@ public final class ChunkFactory {
 			chunk = VLVoxRootChunk.read(stream, childrenStream);
 			break;
 		case PACK:
-			chunk = VoxPackChunk.read(stream);
+			chunk = VLVoxPackChunk.read(stream);
 			break;
 		case SIZE:
-			chunk = VoxSizeChunk.read(stream);
+			chunk = VLVoxSizeChunk.read(stream);
 			break;
 		case XYZI:
-			chunk = VoxXYZIChunk.read(stream);
+			chunk = VLVoxXYZIChunk.read(stream);
 			break;
 		case RGBA:
-			chunk = VoxRGBAChunk.read(stream);
+			chunk = VLVoxRGBAChunk.read(stream);
 			break;
 		case MATT: // Obsolete
-			chunk = VoxMATTChunk.read(stream);
+			chunk = VLVoxMATTChunk.read(stream);
 			break;
 		case MATL:
-			chunk = VoxMATLChunk.read(stream);
+			chunk = VLVoxMATLChunk.read(stream);
 			break;
 			
 		case nSHP: // Shape Node Chunk
-			chunk = VoxShapeChunk.read(stream);
+			chunk = VLVoxShapeChunk.read(stream);
 			break;
 			
 		case nTRN: // Transform Node Chunk
-			chunk = VoxTransformChunk.read(stream);
+			chunk = VLVoxTransformChunk.read(stream);
 			break;
 
 		case nGRP: // Group Node Chunk
-			chunk = VoxGroupChunk.read(stream);
+			chunk = VLVoxGroupChunk.read(stream);
 			break;
 
 		case LAYR:
-			chunk = VoxLayerChunk.read(stream);
+			chunk = VLVoxLayerChunk.read(stream);
 			break;
 
 			// These chunks are unsupported and simply skipped.
 		case "rOBJ":
 		case "rCAM":
 		case "NOTE":
-			chunk = new VoxDummyChunk(type);
+			chunk = new VLVoxDummyChunk(type);
 			break;
 			
 		default:

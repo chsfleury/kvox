@@ -8,24 +8,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
-public final class VoxXYZIChunk extends VoxChunk {
+public final class VLVoxXYZIChunk extends VLVoxChunk {
 	
     private final Voxel[] voxels;
 
-    public VoxXYZIChunk(int voxelCount) {
-        super(ChunkFactory.XYZI);
+    public VLVoxXYZIChunk(int voxelCount) {
+        super(VLChunkFactory.XYZI);
         voxels = new Voxel[voxelCount];
     }
 
-    public VoxXYZIChunk(Collection<Voxel> voxels) {
-        super(ChunkFactory.XYZI);
+    public VLVoxXYZIChunk(Collection<Voxel> voxels) {
+        super(VLChunkFactory.XYZI);
         this.voxels = new Voxel[voxels.size()];
         voxels.toArray(this.voxels);
     }
 
-    public static VoxXYZIChunk read(InputStream stream) throws IOException {
+    public static VLVoxXYZIChunk read(InputStream stream) throws IOException {
         int voxelCount = StreamUtils.readIntLE(stream);
-        var chunk = new VoxXYZIChunk(voxelCount);
+        var chunk = new VLVoxXYZIChunk(voxelCount);
         //System.out.println(voxelCount + " voxels");
 
         for (int i = 0; i < voxelCount; i++) {

@@ -9,19 +9,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class VoxGroupChunk extends VoxChunk {
+public final class VLVoxGroupChunk extends VLVoxChunk {
 	
 	public final int id;
-	public List<Integer> child_ids = new ArrayList<Integer>();
+	public List<Integer> childIds = new ArrayList<Integer>();
 
-    public VoxGroupChunk(int id) {
-        super(ChunkFactory.nGRP);
+    public VLVoxGroupChunk(int id) {
+        super(VLChunkFactory.nGRP);
         this.id = id;
     }
 
-    public static VoxGroupChunk read(InputStream stream) throws IOException {
+    public static VLVoxGroupChunk read(InputStream stream) throws IOException {
         var id = StreamUtils.readIntLE(stream);
-        var chunk = new VoxGroupChunk(id);
+        var chunk = new VLVoxGroupChunk(id);
         HashMap<String, String> dict = StreamUtils.readDictionary(stream);
         /*if (dict.size() > 0) {
     		Settings.p("dict=" + dict);
@@ -30,7 +30,7 @@ public final class VoxGroupChunk extends VoxChunk {
 
         for (int i=0 ; i<num_children ; i++) {
             int child_id = StreamUtils.readIntLE(stream);
-            chunk.child_ids.add(child_id);
+            chunk.childIds.add(child_id);
         }
         return chunk;
     }
@@ -39,7 +39,7 @@ public final class VoxGroupChunk extends VoxChunk {
     protected void writeContent(OutputStream stream) throws IOException {
         StreamUtils.writeIntLE(id, stream);
         StreamUtils.writeIntLE(0, stream); // dict
-        StreamUtils.writeIntLE(child_ids.size(), stream);
-        for (var childId : child_ids) StreamUtils.writeIntLE(childId, stream);
+        StreamUtils.writeIntLE(childIds.size(), stream);
+        for (var childId : childIds) StreamUtils.writeIntLE(childId, stream);
     }
 }

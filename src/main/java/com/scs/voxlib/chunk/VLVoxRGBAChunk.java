@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class VoxRGBAChunk extends VoxChunk {
+public final class VLVoxRGBAChunk extends VLVoxChunk {
 	
-    static final int[] DEFAULT_PALETTE = new int[] {
+    public static final int[] DEFAULT_PALETTE = new int[] {
         0x00000000, 0xFFFFFFFF, 0xFFCCFFFF, 0xFF99FFFF, 0xFF66FFFF, 0xFF33FFFF,
         0xFF00FFFF, 0xFFFFCCFF, 0xFFCCCCFF, 0xFF99CCFF, 0xFF66CCFF, 0xFF33CCFF,
         0xFF00CCFF, 0xFFFF99FF, 0xFFCC99FF, 0xFF9999FF, 0xFF6699FF, 0xFF3399FF,
@@ -56,8 +56,8 @@ public final class VoxRGBAChunk extends VoxChunk {
 
     private final int[] palette = new int[256];
 
-    public VoxRGBAChunk() {
-        super(ChunkFactory.RGBA);
+    public VLVoxRGBAChunk() {
+        super(VLChunkFactory.RGBA);
     }
 
     /**
@@ -66,15 +66,15 @@ public final class VoxRGBAChunk extends VoxChunk {
      * the lowest 8 bits represent the blue channel.
      * Valid indices are from 1 to 255; 0 is not used.
      */
-    public VoxRGBAChunk(int[] palette) {
-        super(ChunkFactory.RGBA);
+    public VLVoxRGBAChunk(int[] palette) {
+        super(VLChunkFactory.RGBA);
         for (int i = 1; i < 256 && i < palette.length; i++) {
             this.palette[i] = palette[i];
         }
     }
 
-    public static VoxRGBAChunk read(InputStream stream) throws IOException {
-        var chunk = new VoxRGBAChunk();
+    public static VLVoxRGBAChunk read(InputStream stream) throws IOException {
+        var chunk = new VLVoxRGBAChunk();
         for (int i = 0; i < 255; i++) {
             var abgr = StreamUtils.readIntLE(stream);
             chunk.palette[i + 1] = ABGRToARGB(abgr);

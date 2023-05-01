@@ -1,6 +1,6 @@
 package com.scs.voxlib;
 
-import com.scs.voxlib.chunk.VoxChunk;
+import com.scs.voxlib.chunk.VLVoxChunk;
 import com.scs.voxlib.chunk.VLVoxRootChunk;
 import fr.chsfleury.kvox.VoxReader;
 
@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-public class VLVoxReader implements VoxReader {
-	public static final int VERSION = 150;
+public class VLVoxReader implements VoxReader<VLVoxRootChunk> {
+	public static final int VOX_FORMAT_VERSION = 150;
 
     protected static final byte[] MAGIC_BYTES = new byte[] {
         (byte)'V', (byte)'O', (byte)'X', (byte)' '
@@ -37,13 +37,13 @@ public class VLVoxReader implements VoxReader {
 
         int fileVersion = StreamUtils.readIntLE(stream);
 
-        if (fileVersion < VERSION) {
+        if (fileVersion < VOX_FORMAT_VERSION) {
             throw new InvalidVoxException(
-                String.format("Vox versions older than %d are not supported", VERSION)
+                String.format("Vox versions older than %d are not supported", VOX_FORMAT_VERSION)
             );
         }
 
-        VoxChunk chunk = VoxChunk.readChunk(stream);
+        VLVoxChunk chunk = VLVoxChunk.readChunk(stream);
         
         if (chunk == null) {
             throw new InvalidVoxException("No root chunk present in the file");

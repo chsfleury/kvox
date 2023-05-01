@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public final class VoxMaterial {
     private final int id;
-    private final HashMap<String, String> properties;
+    private final Map<String, String> properties;
 
-    public VoxMaterial(int id, HashMap<String, String> properties) {
+    public VoxMaterial(int id, Map<String, String> properties) {
         this.id = id;
 
         if (properties == null) {

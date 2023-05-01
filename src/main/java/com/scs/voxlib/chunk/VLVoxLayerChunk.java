@@ -8,20 +8,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-public final class VoxLayerChunk extends VoxChunk {
+public final class VLVoxLayerChunk extends VLVoxChunk {
 
 	public int id;
 	public int child_node_id;
 	public GridPoint3 transform = new GridPoint3();
 
-	public VoxLayerChunk() {
-		super(ChunkFactory.LAYR);
+	public VLVoxLayerChunk() {
+		super(VLChunkFactory.LAYR);
 	}
 
-	public static VoxLayerChunk read(InputStream stream)
+	public static VLVoxLayerChunk read(InputStream stream)
 		throws IOException
 	{
-		var chunk = new VoxLayerChunk();
+		var chunk = new VLVoxLayerChunk();
 		chunk.id = StreamUtils.readIntLE(stream);
 		HashMap<String, String> dict = StreamUtils.readDictionary(stream);
 		//Settings.p("dict=" + dict);

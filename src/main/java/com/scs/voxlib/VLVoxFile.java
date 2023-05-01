@@ -2,12 +2,13 @@ package com.scs.voxlib;
 
 import com.scs.voxlib.chunk.VLVoxRootChunk;
 import com.scs.voxlib.mat.VoxMaterial;
+import fr.chsfleury.kvox.VoxFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public final class VLVoxFile {
+public final class VLVoxFile implements VoxFile<VLVoxRootChunk> {
     private final int version;
     private final VLVoxRootChunk root;
 
@@ -16,7 +17,7 @@ public final class VLVoxFile {
         this.root = root;
     }
 
-    VLVoxRootChunk getRoot() {
+    public VLVoxRootChunk getRoot() {
         return root;
     }
 

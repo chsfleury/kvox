@@ -7,24 +7,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class VoxSizeChunk extends VoxChunk {
+public final class VLVoxSizeChunk extends VLVoxChunk {
 	
     private final GridPoint3 size;
 
-    public VoxSizeChunk(GridPoint3 size) {
-        super(ChunkFactory.SIZE);
+    public VLVoxSizeChunk(GridPoint3 size) {
+        super(VLChunkFactory.SIZE);
         this.size = size;
     }
 
-    public VoxSizeChunk(int width, int length, int height) {
-        super(ChunkFactory.SIZE);
+    public VLVoxSizeChunk(int width, int length, int height) {
+        super(VLChunkFactory.SIZE);
         this.size = new GridPoint3(width, length, height);
     }
 
-    public static VoxSizeChunk read(InputStream stream) throws IOException {
+    public static VLVoxSizeChunk read(InputStream stream) throws IOException {
         var size = StreamUtils.readVector3i(stream);
         //System.out.println("Read size of " + size);
-        return new VoxSizeChunk(size);
+        return new VLVoxSizeChunk(size);
     }
 
     public GridPoint3 getSize() {

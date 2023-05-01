@@ -9,16 +9,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public final class VoxMATTChunk extends VoxChunk {
+public final class VLVoxMATTChunk extends VLVoxChunk {
 	
     private final VoxOldMaterial material;
 
-    public VoxMATTChunk(VoxOldMaterial material) {
-        super(ChunkFactory.MATT);
+    public VLVoxMATTChunk(VoxOldMaterial material) {
+        super(VLChunkFactory.MATT);
         this.material = material;
     }
 
-    public static VoxMATTChunk read(InputStream stream) throws IOException {
+    public static VLVoxMATTChunk read(InputStream stream) throws IOException {
         int id = StreamUtils.readIntLE(stream);
         int typeIndex = StreamUtils.readIntLE(stream);
         VoxOldMaterialType matType = VoxOldMaterialType.fromIndex(typeIndex)
@@ -43,7 +43,7 @@ public final class VoxMATTChunk extends VoxChunk {
 
         try {
             var material = new VoxOldMaterial(id, weight, matType, properties, isTotalPower);
-            return new VoxMATTChunk(material);
+            return new VLVoxMATTChunk(material);
         } catch (IllegalArgumentException e) {
             throw new InvalidVoxException("Material with ID " + id + " is invalid", e);
         }

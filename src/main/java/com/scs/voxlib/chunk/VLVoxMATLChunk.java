@@ -8,20 +8,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-public final class VoxMATLChunk extends VoxChunk {
+public final class VLVoxMATLChunk extends VLVoxChunk {
 	
     private final VoxMaterial material;
 
-    public VoxMATLChunk(VoxMaterial material) {
-        super(ChunkFactory.MATL);
+    public VLVoxMATLChunk(VoxMaterial material) {
+        super(VLChunkFactory.MATL);
         this.material = material;
     }
 
-    public static VoxMATLChunk read(InputStream stream) throws IOException {
+    public static VLVoxMATLChunk read(InputStream stream) throws IOException {
         int id = StreamUtils.readIntLE(stream);
         HashMap<String, String> props = StreamUtils.readDictionary(stream);
         var material = new VoxMaterial(id, props);
-        return new VoxMATLChunk(material);
+        return new VLVoxMATLChunk(material);
     }
 
     public VoxMaterial getMaterial() {

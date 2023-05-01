@@ -6,7 +6,7 @@ import com.scs.voxlib.StreamUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public abstract class VoxChunk {
+public abstract class VLVoxChunk {
 
 	private final String type;
 
@@ -14,15 +14,15 @@ public abstract class VoxChunk {
 		return type;
 	}
 
-	public VoxChunk(String type) {
+	public VLVoxChunk(String type) {
 		this.type = type;
 	}
 	
-	public static VoxChunk readChunk(InputStream stream) throws IOException {
+	public static VLVoxChunk readChunk(InputStream stream) throws IOException {
 		return readChunk(stream, null);
 	}
 
-	public static VoxChunk readChunk(InputStream stream, String expectedID) throws IOException {
+	public static VLVoxChunk readChunk(InputStream stream, String expectedID) throws IOException {
 		byte[] chunkID = new byte[4];
 		int bytesRead = stream.read(chunkID);
 		if (bytesRead != 4) {
@@ -54,8 +54,7 @@ public abstract class VoxChunk {
 
 		try (ByteArrayInputStream chunkStream = new ByteArrayInputStream(chunkBytes);
 				ByteArrayInputStream childrenStream = new ByteArrayInputStream(childrenChunkBytes)) {
-			VoxChunk chunk = ChunkFactory.createChunk(id, chunkStream, childrenStream);
-			return chunk;
+			return VLChunkFactory.createChunk(id, chunkStream, childrenStream);
 		}
 	}
 
