@@ -1,7 +1,7 @@
 package com.scs.voxlib;
 
 import com.scs.voxlib.chunk.VLVoxRootChunk;
-import com.scs.voxlib.mat.VoxMaterial;
+import com.scs.voxlib.mat.VLVoxMaterial;
 import fr.chsfleury.kvox.VoxFile;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ public final class VLVoxFile implements VoxFile<VLVoxRootChunk> {
         return root.getPalette();
     }
 
-    public Map<Integer, VoxMaterial> getMaterials() {
+    public Map<Integer, VLVoxMaterial> getMaterials() {
         return root.getMaterials();
     }
 

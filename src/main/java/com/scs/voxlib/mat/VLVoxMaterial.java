@@ -4,11 +4,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class VoxMaterial {
+public final class VLVoxMaterial {
     private final int id;
     private final Map<String, String> properties;
 
-    public VoxMaterial(int id, Map<String, String> properties) {
+    public VLVoxMaterial(int id, Map<String, String> properties) {
         this.id = id;
 
         if (properties == null) {
@@ -60,7 +60,7 @@ public final class VoxMaterial {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VoxMaterial that = (VoxMaterial) o;
+        VLVoxMaterial that = (VLVoxMaterial) o;
         return id == that.id &&
                 properties.equals(that.properties);
     }

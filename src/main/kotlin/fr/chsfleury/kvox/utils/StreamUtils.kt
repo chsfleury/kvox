@@ -1,7 +1,7 @@
 package fr.chsfleury.kvox.utils
 
-import com.scs.voxlib.GridPoint3
-import com.scs.voxlib.InvalidVoxException
+import com.scs.voxlib.VLGridPoint3
+import com.scs.voxlib.VLInvalidVoxException
 import fr.chsfleury.kvox.utils.ByteArrays.toBufferLittleEndian
 import java.io.IOException
 import java.io.InputStream
@@ -31,21 +31,21 @@ object StreamUtils {
     }
 
     @Throws(IOException::class)
-    fun InputStream.readVector3i() = GridPoint3(
+    fun InputStream.readVector3i() = VLGridPoint3(
         readIntLittleEndian(),
         readIntLittleEndian(),
         readIntLittleEndian()
     )
 
     @Throws(IOException::class)
-    fun InputStream.readVector3b(): GridPoint3 {
+    fun InputStream.readVector3b(): VLGridPoint3 {
         val x = read()
         val y = read()
         val z = read()
         if (x == -1 || y == -1 || z == -1) {
             throw IOException("Not enough bytes to read a vector3b")
         }
-        return GridPoint3(
+        return VLGridPoint3(
             x and 0xff,
             y and 0xff,
             z and 0xff
@@ -69,7 +69,7 @@ object StreamUtils {
     fun InputStream.readDictionary(): Map<String, String> {
         val n = readIntLittleEndian()
         if (n < 0) {
-            throw InvalidVoxException("Dictionary too large")
+            throw VLInvalidVoxException("Dictionary too large")
         }
         val dict = HashMap<String, String>(n)
         for (i in 0 until n) {
@@ -90,14 +90,14 @@ object StreamUtils {
     )
 
     @Throws(IOException::class)
-    fun OutputStream.writeVector3i(v: GridPoint3) {
+    fun OutputStream.writeVector3i(v: VLGridPoint3) {
         writeIntLittleEndian(v.x)
         writeIntLittleEndian(v.y)
         writeIntLittleEndian(v.z)
     }
 
     @Throws(IOException::class)
-    fun OutputStream.writeVector3b(v: GridPoint3) {
+    fun OutputStream.writeVector3b(v: VLGridPoint3) {
         write(v.x)
         write(v.y)
         write(v.z)

@@ -1,6 +1,6 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.StreamUtils;
+import com.scs.voxlib.VLStreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,7 +76,7 @@ public final class VLVoxRGBAChunk extends VLVoxChunk {
     public static VLVoxRGBAChunk read(InputStream stream) throws IOException {
         var chunk = new VLVoxRGBAChunk();
         for (int i = 0; i < 255; i++) {
-            var abgr = StreamUtils.readIntLE(stream);
+            var abgr = VLStreamUtils.readIntLE(stream);
             chunk.palette[i + 1] = ABGRToARGB(abgr);
         }
         return chunk;
@@ -112,7 +112,7 @@ public final class VLVoxRGBAChunk extends VLVoxChunk {
     protected void writeContent(OutputStream stream) throws IOException {
         for (int i = 0; i < 255; i++) {
             var abgr = ARGBToABGR(palette[i + 1]);
-            StreamUtils.writeIntLE(abgr, stream);
+            VLStreamUtils.writeIntLE(abgr, stream);
         }
     }
 }

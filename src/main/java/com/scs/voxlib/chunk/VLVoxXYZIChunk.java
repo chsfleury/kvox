@@ -1,7 +1,7 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.StreamUtils;
-import com.scs.voxlib.Voxel;
+import com.scs.voxlib.VLStreamUtils;
+import com.scs.voxlib.VLVoxel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,41 +10,41 @@ import java.util.Collection;
 
 public final class VLVoxXYZIChunk extends VLVoxChunk {
 	
-    private final Voxel[] voxels;
+    private final VLVoxel[] voxels;
 
     public VLVoxXYZIChunk(int voxelCount) {
         super(VLChunkFactory.XYZI);
-        voxels = new Voxel[voxelCount];
+        voxels = new VLVoxel[voxelCount];
     }
 
-    public VLVoxXYZIChunk(Collection<Voxel> voxels) {
+    public VLVoxXYZIChunk(Collection<VLVoxel> voxels) {
         super(VLChunkFactory.XYZI);
-        this.voxels = new Voxel[voxels.size()];
+        this.voxels = new VLVoxel[voxels.size()];
         voxels.toArray(this.voxels);
     }
 
     public static VLVoxXYZIChunk read(InputStream stream) throws IOException {
-        int voxelCount = StreamUtils.readIntLE(stream);
+        int voxelCount = VLStreamUtils.readIntLE(stream);
         var chunk = new VLVoxXYZIChunk(voxelCount);
         //System.out.println(voxelCount + " voxels");
 
         for (int i = 0; i < voxelCount; i++) {
-            var position = StreamUtils.readVector3b(stream);
+            var position = VLStreamUtils.readVector3b(stream);
             var colorIndex = (byte) ((byte)stream.read() & 0xff);
-            chunk.voxels[i] = new Voxel(position, colorIndex);
+            chunk.voxels[i] = new VLVoxel(position, colorIndex);
         }
         return chunk;
     }
 
-    public Voxel[] getVoxels() {
+    public VLVoxel[] getVoxels() {
         return voxels;
     }
 
     @Override
     protected void writeContent(OutputStream stream) throws IOException {
-        StreamUtils.writeIntLE(voxels.length, stream);
+        VLStreamUtils.writeIntLE(voxels.length, stream);
         for (var voxel : voxels) {
-            StreamUtils.writeVector3b(voxel.getPosition(), stream);
+            VLStreamUtils.writeVector3b(voxel.getPosition(), stream);
             stream.write(voxel.getColourIndex());
         }
     }

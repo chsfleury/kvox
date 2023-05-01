@@ -2,21 +2,21 @@ package com.scs.voxlib;
 
 import java.util.Objects;
 
-public class GridPoint3 {
+public class VLGridPoint3 {
 
 	public int x, y, z;
 	
-	public GridPoint3() {
+	public VLGridPoint3() {
 	}
 
-	public GridPoint3(int _x, int _y, int _z) {
+	public VLGridPoint3(int _x, int _y, int _z) {
 		x = _x;
 		y = _y;
 		z = _z;
 	}
 	
 	
-	public GridPoint3(GridPoint3 point) {
+	public VLGridPoint3(VLGridPoint3 point) {
 		x = point.x;
 		y = point.y;
 		z = point.z;
@@ -36,7 +36,7 @@ public class GridPoint3 {
 	}
 
 
-	public void add(GridPoint3 point) {
+	public void add(VLGridPoint3 point) {
 		x += point.x;
 		y += point.y;
 		z += point.z;
@@ -46,7 +46,7 @@ public class GridPoint3 {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		GridPoint3 that = (GridPoint3) o;
+		VLGridPoint3 that = (VLGridPoint3) o;
 		return x == that.x && y == that.y && z == that.z;
 	}
 

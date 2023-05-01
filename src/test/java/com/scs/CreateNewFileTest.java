@@ -2,7 +2,7 @@ package com.scs;
 
 import com.scs.voxlib.VLVoxFile;
 import com.scs.voxlib.VLVoxWriter;
-import com.scs.voxlib.Voxel;
+import com.scs.voxlib.VLVoxel;
 import com.scs.voxlib.chunk.VLVoxGroupChunk;
 import com.scs.voxlib.chunk.VLVoxRGBAChunk;
 import com.scs.voxlib.chunk.VLVoxRootChunk;
@@ -42,10 +42,10 @@ public class CreateNewFileTest {
         var palette = new VLVoxRGBAChunk(paletteArray);
 
         // Set voxels using the color indices.
-        var voxels = new ArrayList<Voxel>();
-        voxels.add(new Voxel(1, 1, 0, ID_GREEN));
-        voxels.add(new Voxel(1, 1, 1, ID_YELLOW));
-        voxels.add(new Voxel(1, 1, 2, ID_RED));
+        var voxels = new ArrayList<VLVoxel>();
+        voxels.add(new VLVoxel(1, 1, 0, ID_GREEN));
+        voxels.add(new VLVoxel(1, 1, 1, ID_YELLOW));
+        voxels.add(new VLVoxel(1, 1, 2, ID_RED));
         var model = new VLVoxXYZIChunk(voxels);
 
         // The following chunks are the necessary containers for our model:

@@ -1,10 +1,10 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.GridPoint3;
+import com.scs.voxlib.VLGridPoint3;
 import com.scs.voxlib.VLVoxModelInstance;
-import com.scs.voxlib.VoxModelBlueprint;
-import com.scs.voxlib.mat.VoxMaterial;
-import com.scs.voxlib.mat.VoxOldMaterial;
+import com.scs.voxlib.VLVoxModelBlueprint;
+import com.scs.voxlib.mat.VLVoxMaterial;
+import com.scs.voxlib.mat.VLVoxOldMaterial;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,11 +15,11 @@ import java.util.List;
 
 public final class VLVoxRootChunk extends VLVoxChunk {
 
-	private final HashMap<Integer, VoxModelBlueprint> models = new HashMap<>();
+	private final HashMap<Integer, VLVoxModelBlueprint> models = new HashMap<>();
 	private final List<VLVoxModelInstance> model_instances = new ArrayList<>();
 	private int[] palette = VLVoxRGBAChunk.DEFAULT_PALETTE;
-	private final HashMap<Integer, VoxMaterial> materials = new HashMap<>();
-	private final HashMap<Integer, VoxOldMaterial> oldMaterials = new HashMap<>();
+	private final HashMap<Integer, VLVoxMaterial> materials = new HashMap<>();
+	private final HashMap<Integer, VLVoxOldMaterial> oldMaterials = new HashMap<>();
 	private final HashMap<Integer, VLVoxShapeChunk> shapeChunks = new HashMap<Integer, VLVoxShapeChunk>();
 	private final HashMap<Integer, VLVoxTransformChunk> transformChunks = new HashMap<Integer, VLVoxTransformChunk>();
 	private final HashMap<Integer, VLVoxGroupChunk> groupChunks = new HashMap<Integer, VLVoxGroupChunk>();
@@ -30,7 +30,7 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 	 * This is a temporary variable that remembers the last SIZE, so that
 	 * it can be used for the next XYZI chunk.
 	 */
-	private GridPoint3 size;
+	private VLGridPoint3 size;
 	private final List<VLVoxChunk> children = new ArrayList<>();
 
 	public VLVoxRootChunk() {
@@ -81,7 +81,7 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 			VLVoxXYZIChunk xyzi = (VLVoxXYZIChunk) chunk;
 			models.put(
 				models.size(),
-				new VoxModelBlueprint(models.size(), size, xyzi.getVoxels())
+				new VLVoxModelBlueprint(models.size(), size, xyzi.getVoxels())
 			);
 		} else if (chunk instanceof VLVoxRGBAChunk) {
 			VLVoxRGBAChunk rgba = (VLVoxRGBAChunk) chunk;
@@ -93,10 +93,10 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 
 	private void processChunk(VLVoxChunk chunk) {
 		if (chunk instanceof VLVoxMATLChunk) {
-			VoxMaterial mat = ((VLVoxMATLChunk) chunk).getMaterial();
+			VLVoxMaterial mat = ((VLVoxMATLChunk) chunk).getMaterial();
 			materials.put(mat.getID(), mat);
 		} else if (chunk instanceof VLVoxMATTChunk) {
-			VoxOldMaterial mat = ((VLVoxMATTChunk) chunk).getMaterial();
+			VLVoxOldMaterial mat = ((VLVoxMATTChunk) chunk).getMaterial();
 			oldMaterials.put(mat.getID(), mat);
 		} else if (chunk instanceof VLVoxShapeChunk) {
 			VLVoxShapeChunk shapeChunk = (VLVoxShapeChunk)chunk;
@@ -114,8 +114,8 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 	}
 
 	
-	private GridPoint3 findShapeOrGroupParent(int shape_id) {
-		GridPoint3 offset = new GridPoint3(0, 0, 0);
+	private VLGridPoint3 findShapeOrGroupParent(int shape_id) {
+		VLGridPoint3 offset = new VLGridPoint3(0, 0, 0);
 
 		for(VLVoxTransformChunk transformChunk : this.transformChunks.values()) {
 			if (transformChunk.childNodeId == shape_id) {
@@ -129,12 +129,12 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 	}
 
 
-	private GridPoint3 findTransformParent(int transform_id) {
-		GridPoint3 offset = new GridPoint3(0, 0, 0);
+	private VLGridPoint3 findTransformParent(int transform_id) {
+		VLGridPoint3 offset = new VLGridPoint3(0, 0, 0);
 
 		for(VLVoxGroupChunk groupChunk : this.groupChunks.values()) {
 			if (groupChunk.childIds.contains(transform_id)) {
-				GridPoint3 suboffset = this.findShapeOrGroupParent(groupChunk.id);
+				VLGridPoint3 suboffset = this.findShapeOrGroupParent(groupChunk.id);
 				offset.add(suboffset);
 				break;
 			}
@@ -155,12 +155,12 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 	}
 
 
-	public HashMap<Integer, VoxMaterial> getMaterials() {
+	public HashMap<Integer, VLVoxMaterial> getMaterials() {
 		return materials;
 	}
 
 
-	public HashMap<Integer, VoxOldMaterial> getOldMaterials() {
+	public HashMap<Integer, VLVoxOldMaterial> getOldMaterials() {
 		return oldMaterials;
 	}
 
@@ -171,8 +171,8 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 	}
 
 
-	private void processTransformChunk(VLVoxTransformChunk transform_chunk, GridPoint3 pos) {
-		GridPoint3 new_pos = new GridPoint3(pos);
+	private void processTransformChunk(VLVoxTransformChunk transform_chunk, VLGridPoint3 pos) {
+		VLGridPoint3 new_pos = new VLGridPoint3(pos);
 		if (this.groupChunks.containsKey(transform_chunk.childNodeId)) {
 			processGroupChunk(this.groupChunks.get(transform_chunk.childNodeId), new_pos);
 		} else if (this.shapeChunks.containsKey(transform_chunk.childNodeId)) {
@@ -181,21 +181,21 @@ public final class VLVoxRootChunk extends VLVoxChunk {
 	}
 
 
-	private void processGroupChunk(VLVoxGroupChunk group_chunk, GridPoint3 pos) {
+	private void processGroupChunk(VLVoxGroupChunk group_chunk, VLGridPoint3 pos) {
 		for (int child_id : group_chunk.childIds) {
 			VLVoxTransformChunk trn = this.transformChunks.get(child_id);
-			GridPoint3 new_pos = new GridPoint3(pos);
+			VLGridPoint3 new_pos = new VLGridPoint3(pos);
 			new_pos.add(trn.transform);
 			this.processTransformChunk(trn, new_pos);
 		}
 	}
 
 
-	private void processShapeChunk(VLVoxShapeChunk shape_chunk, GridPoint3 pos) {
+	private void processShapeChunk(VLVoxShapeChunk shape_chunk, VLGridPoint3 pos) {
 		for (int model_id : shape_chunk.model_ids) {
-			VoxModelBlueprint model = this.models.get(model_id);
+			VLVoxModelBlueprint model = this.models.get(model_id);
 			if (model.getVoxels().length > 0) {
-				VLVoxModelInstance instance = new VLVoxModelInstance(model, new GridPoint3(pos));
+				VLVoxModelInstance instance = new VLVoxModelInstance(model, new VLGridPoint3(pos));
 				this.model_instances.add(instance);
 			}
 		}

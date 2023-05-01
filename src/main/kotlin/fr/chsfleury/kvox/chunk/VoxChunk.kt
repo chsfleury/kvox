@@ -1,7 +1,7 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.InvalidVoxException
-import com.scs.voxlib.StreamUtils
+import com.scs.voxlib.VLInvalidVoxException
+import com.scs.voxlib.VLStreamUtils
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -22,8 +22,8 @@ open class VoxChunk(
                 val contentBytes = contentStream.toByteArray()
                 writeChildren(childStream)
                 val childBytes = childStream.toByteArray()
-                StreamUtils.writeIntLE(contentBytes.size, stream)
-                StreamUtils.writeIntLE(childBytes.size, stream)
+                VLStreamUtils.writeIntLE(contentBytes.size, stream)
+                VLStreamUtils.writeIntLE(childBytes.size, stream)
                 stream.write(contentBytes)
                 stream.write(childBytes)
             }
@@ -48,7 +48,7 @@ open class VoxChunk(
         fun readChunk(inputStream: InputStream, expectedID: String?): VoxChunk? {
             val id = getChunkId(inputStream) ?: return null
             if (expectedID != null && id != expectedID) {
-                throw InvalidVoxException("$expectedID chunk expected, got $id")
+                throw VLInvalidVoxException("$expectedID chunk expected, got $id")
             }
             val length = inputStream.readIntLittleEndian()
             val childrenLength = inputStream.readIntLittleEndian()
@@ -64,7 +64,7 @@ open class VoxChunk(
         private fun readChunkBytes(chunkId: String, inputStream: InputStream, length: Int): ByteArray {
             val chunkBytes = ByteArray(length)
             if (length > 0 && inputStream.read(chunkBytes) != length) {
-                throw InvalidVoxException("Chunk '$chunkId' is incomplete")
+                throw VLInvalidVoxException("Chunk '$chunkId' is incomplete")
             }
             return chunkBytes
         }
@@ -83,7 +83,7 @@ open class VoxChunk(
                     // There's no chunk here, this is fine.
                     return null
                 }
-                throw InvalidVoxException("Incomplete chunk ID")
+                throw VLInvalidVoxException("Incomplete chunk ID")
             }
             return chunkID.toString(Charsets.UTF_8)
         }

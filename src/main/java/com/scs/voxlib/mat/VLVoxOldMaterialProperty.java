@@ -1,6 +1,6 @@
 package com.scs.voxlib.mat;
 
-public enum VoxOldMaterialProperty {
+public enum VLVoxOldMaterialProperty {
     PLASTIC,
     ROUGHNESS,
     SPECULAR,

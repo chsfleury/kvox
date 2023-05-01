@@ -1,6 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.Voxel
+import com.scs.voxlib.VLVoxel
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.readVector3b
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
@@ -10,11 +10,11 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxXYZIChunk(
-    val voxels: Array<Voxel?>
+    val voxels: Array<VLVoxel?>
 ): VoxChunk(ChunkFactory.XYZI) {
 
-    constructor(voxelCount: Int) : this(arrayOfNulls<Voxel>(voxelCount))
-    constructor(voxels: Collection<Voxel?>) : this(voxels.toTypedArray())
+    constructor(voxelCount: Int) : this(arrayOfNulls<VLVoxel>(voxelCount))
+    constructor(voxels: Collection<VLVoxel?>) : this(voxels.toTypedArray())
 
     companion object {
 
@@ -25,7 +25,7 @@ class VoxXYZIChunk(
             for (i in 0 until voxelCount) {
                 val position = stream.readVector3b()
                 val colorIndex = (stream.read() and 0xff).toByte()
-                chunk.voxels[i] = Voxel(position, colorIndex)
+                chunk.voxels[i] = VLVoxel(position, colorIndex)
             }
             return chunk
         }

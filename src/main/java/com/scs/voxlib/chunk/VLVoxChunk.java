@@ -1,7 +1,7 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.InvalidVoxException;
-import com.scs.voxlib.StreamUtils;
+import com.scs.voxlib.VLInvalidVoxException;
+import com.scs.voxlib.VLStreamUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,23 +35,23 @@ public abstract class VLVoxChunk {
 				return null;
 			}
 
-			throw new InvalidVoxException("Incomplete chunk ID");
+			throw new VLInvalidVoxException("Incomplete chunk ID");
 		}
 
 		String id = new String(chunkID);
 
 		if (expectedID != null && !expectedID.equals(id)) {
-			throw new InvalidVoxException(expectedID + " chunk expected, got " + id);
+			throw new VLInvalidVoxException(expectedID + " chunk expected, got " + id);
 		}
 
-		int length = StreamUtils.readIntLE(stream);
-		int childrenLength = StreamUtils.readIntLE(stream);
+		int length = VLStreamUtils.readIntLE(stream);
+		int childrenLength = VLStreamUtils.readIntLE(stream);
 
 		byte[] chunkBytes = new byte[length];
 		byte[] childrenChunkBytes = new byte[childrenLength];
 
 		if (length > 0 && stream.read(chunkBytes) != length) {
-			throw new InvalidVoxException("Chunk \"" + id + "\" is incomplete");
+			throw new VLInvalidVoxException("Chunk \"" + id + "\" is incomplete");
 		}
 
 		stream.read(childrenChunkBytes);
@@ -74,8 +74,8 @@ public abstract class VLVoxChunk {
 			writeChildren(childStream);
 			var childBytes = childStream.toByteArray();
 
-			StreamUtils.writeIntLE(contentBytes.length, stream);
-			StreamUtils.writeIntLE(childBytes.length, stream);
+			VLStreamUtils.writeIntLE(contentBytes.length, stream);
+			VLStreamUtils.writeIntLE(childBytes.length, stream);
 			stream.write(contentBytes);
 			stream.write(childBytes);
 		}

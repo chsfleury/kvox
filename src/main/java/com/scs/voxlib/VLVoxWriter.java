@@ -21,7 +21,7 @@ public class VLVoxWriter implements Closeable {
     public void write(VLVoxFile file) throws IOException {
         try (stream) {
             stream.write(VLVoxReader.MAGIC_BYTES);
-            StreamUtils.writeIntLE(file.getVersion(), stream);
+            VLStreamUtils.writeIntLE(file.getVersion(), stream);
             file.getRoot().writeTo(stream);
         }
     }

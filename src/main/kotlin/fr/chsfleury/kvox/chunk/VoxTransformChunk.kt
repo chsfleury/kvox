@@ -1,6 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.GridPoint3
+import com.scs.voxlib.VLGridPoint3
 import fr.chsfleury.kvox.utils.StreamUtils.readDictionary
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeDictionary
@@ -14,7 +14,7 @@ class VoxTransformChunk(
 ): VoxChunk(ChunkFactory.nTRN) {
 
     var childNodeId = 0
-    var transform = GridPoint3()
+    var transform = VLGridPoint3()
 
     companion object {
         private val SPACE_REGEX = Regex(" ")
@@ -41,7 +41,7 @@ class VoxTransformChunk(
                         .dropLastWhile { it.isEmpty() }
                         .toTypedArray()
 
-                    val tmp = GridPoint3(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt())
+                    val tmp = VLGridPoint3(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt())
                     chunk.transform.set(tmp.x, tmp.y, tmp.z)
                 }
             }

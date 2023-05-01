@@ -28,17 +28,17 @@ public class VLVoxReader implements VoxReader<VLVoxRootChunk> {
     public VLVoxFile read() throws IOException {
         byte[] magicBytes = new byte[4];
         if (stream.read(magicBytes) != 4) {
-            throw new InvalidVoxException("Could not read magic bytes");
+            throw new VLInvalidVoxException("Could not read magic bytes");
         }
 
         if (!Arrays.equals(magicBytes, MAGIC_BYTES)) {
-            throw new InvalidVoxException("Invalid magic bytes");
+            throw new VLInvalidVoxException("Invalid magic bytes");
         }
 
-        int fileVersion = StreamUtils.readIntLE(stream);
+        int fileVersion = VLStreamUtils.readIntLE(stream);
 
         if (fileVersion < VOX_FORMAT_VERSION) {
-            throw new InvalidVoxException(
+            throw new VLInvalidVoxException(
                 String.format("Vox versions older than %d are not supported", VOX_FORMAT_VERSION)
             );
         }
@@ -46,11 +46,11 @@ public class VLVoxReader implements VoxReader<VLVoxRootChunk> {
         VLVoxChunk chunk = VLVoxChunk.readChunk(stream);
         
         if (chunk == null) {
-            throw new InvalidVoxException("No root chunk present in the file");
+            throw new VLInvalidVoxException("No root chunk present in the file");
         }
 
         if (!(chunk instanceof VLVoxRootChunk)) {
-            throw new InvalidVoxException("First chunk is not of ID \"MAIN\"");
+            throw new VLInvalidVoxException("First chunk is not of ID \"MAIN\"");
         }
 
         return new VLVoxFile(fileVersion, (VLVoxRootChunk)chunk);

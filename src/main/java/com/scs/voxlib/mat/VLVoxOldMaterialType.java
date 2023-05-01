@@ -2,7 +2,7 @@ package com.scs.voxlib.mat;
 
 import java.util.Optional;
 
-public enum VoxOldMaterialType {
+public enum VLVoxOldMaterialType {
     DIFFUSE,
     METAL,
     GLASS,
@@ -12,8 +12,8 @@ public enum VoxOldMaterialType {
         return ordinal();
     }
 
-    public static Optional<VoxOldMaterialType> fromIndex(int index) {
-        VoxOldMaterialType[] materials = VoxOldMaterialType.values();
+    public static Optional<VLVoxOldMaterialType> fromIndex(int index) {
+        VLVoxOldMaterialType[] materials = VLVoxOldMaterialType.values();
 
         if (index >= 0 && index < materials.length) {
             return Optional.of(materials[index]);
@@ -22,8 +22,8 @@ public enum VoxOldMaterialType {
         return Optional.empty();
     }
 
-    public static Optional<VoxOldMaterialType> parse(String material) {
-        VoxOldMaterialType mat = null;
+    public static Optional<VLVoxOldMaterialType> parse(String material) {
+        VLVoxOldMaterialType mat = null;
 
         switch (material) {
             case "_diffuse":

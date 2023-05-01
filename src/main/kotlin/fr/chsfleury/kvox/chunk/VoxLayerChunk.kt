@@ -1,6 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.GridPoint3
+import com.scs.voxlib.VLGridPoint3
 import fr.chsfleury.kvox.utils.StreamUtils.readDictionary
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
@@ -11,7 +11,7 @@ import java.io.OutputStream
 class VoxLayerChunk(): VoxChunk(ChunkFactory.LAYR) {
 
     var id = 0
-    private var transform = GridPoint3()
+    private var transform = VLGridPoint3()
 
     companion object {
 

@@ -1,6 +1,6 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.StreamUtils;
+import com.scs.voxlib.VLStreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,16 +20,16 @@ public final class VLVoxGroupChunk extends VLVoxChunk {
     }
 
     public static VLVoxGroupChunk read(InputStream stream) throws IOException {
-        var id = StreamUtils.readIntLE(stream);
+        var id = VLStreamUtils.readIntLE(stream);
         var chunk = new VLVoxGroupChunk(id);
-        HashMap<String, String> dict = StreamUtils.readDictionary(stream);
+        HashMap<String, String> dict = VLStreamUtils.readDictionary(stream);
         /*if (dict.size() > 0) {
     		Settings.p("dict=" + dict);
         }*/
-        int num_children = StreamUtils.readIntLE(stream);
+        int num_children = VLStreamUtils.readIntLE(stream);
 
         for (int i=0 ; i<num_children ; i++) {
-            int child_id = StreamUtils.readIntLE(stream);
+            int child_id = VLStreamUtils.readIntLE(stream);
             chunk.childIds.add(child_id);
         }
         return chunk;
@@ -37,9 +37,9 @@ public final class VLVoxGroupChunk extends VLVoxChunk {
 
     @Override
     protected void writeContent(OutputStream stream) throws IOException {
-        StreamUtils.writeIntLE(id, stream);
-        StreamUtils.writeIntLE(0, stream); // dict
-        StreamUtils.writeIntLE(childIds.size(), stream);
-        for (var childId : childIds) StreamUtils.writeIntLE(childId, stream);
+        VLStreamUtils.writeIntLE(id, stream);
+        VLStreamUtils.writeIntLE(0, stream); // dict
+        VLStreamUtils.writeIntLE(childIds.size(), stream);
+        for (var childId : childIds) VLStreamUtils.writeIntLE(childId, stream);
     }
 }

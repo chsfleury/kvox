@@ -1,17 +1,17 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.InvalidVoxException
-import com.scs.voxlib.StreamUtils
-import com.scs.voxlib.mat.VoxOldMaterial
-import com.scs.voxlib.mat.VoxOldMaterialProperty
-import com.scs.voxlib.mat.VoxOldMaterialType
+import com.scs.voxlib.VLInvalidVoxException
+import com.scs.voxlib.VLStreamUtils
+import com.scs.voxlib.mat.VLVoxOldMaterial
+import com.scs.voxlib.mat.VLVoxOldMaterialProperty
+import com.scs.voxlib.mat.VLVoxOldMaterialType
 import fr.chsfleury.kvox.utils.StreamUtils.readFloatLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import java.io.IOException
 import java.io.InputStream
 
 class VoxMATTChunk(
-    val material: VoxOldMaterial
+    val material: VLVoxOldMaterial
 ): VoxChunk(ChunkFactory.MATT) {
 
     companion object {
@@ -20,26 +20,26 @@ class VoxMATTChunk(
         fun read(stream: InputStream): VoxMATTChunk {
             val id = stream.readIntLittleEndian()
             val typeIndex = stream.readIntLittleEndian()
-            val matType = VoxOldMaterialType.fromIndex(typeIndex)
-                .orElseThrow { InvalidVoxException("Unknown material type $typeIndex") }
+            val matType = VLVoxOldMaterialType.fromIndex(typeIndex)
+                .orElseThrow { VLInvalidVoxException("Unknown material type $typeIndex") }
             val weight = stream.readFloatLittleEndian()
             val propBits = stream.readIntLittleEndian()
-            val isTotalPower = VoxOldMaterialProperty.IS_TOTAL_POWER.isSet(propBits)
+            val isTotalPower = VLVoxOldMaterialProperty.IS_TOTAL_POWER.isSet(propBits)
             var propCount = Integer.bitCount(propBits)
             if (isTotalPower) {
                 propCount-- // IS_TOTAL_POWER has no value
             }
-            val properties = HashMap<VoxOldMaterialProperty, Float>(propCount)
-            for (prop in VoxOldMaterialProperty.values()) {
-                if (prop != VoxOldMaterialProperty.IS_TOTAL_POWER && prop.isSet(propBits)) {
-                    properties[prop] = StreamUtils.readFloatLE(stream)
+            val properties = HashMap<VLVoxOldMaterialProperty, Float>(propCount)
+            for (prop in VLVoxOldMaterialProperty.values()) {
+                if (prop != VLVoxOldMaterialProperty.IS_TOTAL_POWER && prop.isSet(propBits)) {
+                    properties[prop] = VLStreamUtils.readFloatLE(stream)
                 }
             }
             return try {
-                val material = VoxOldMaterial(id, weight, matType, properties, isTotalPower)
+                val material = VLVoxOldMaterial(id, weight, matType, properties, isTotalPower)
                 VoxMATTChunk(material)
             } catch (e: IllegalArgumentException) {
-                throw InvalidVoxException("Material with ID $id is invalid", e)
+                throw VLInvalidVoxException("Material with ID $id is invalid", e)
             }
         }
 

@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class StreamUtils {
+public final class VLStreamUtils {
 
 	public static int readIntLE(InputStream stream) throws IOException {
         byte[] bytes = new byte[4];
@@ -29,11 +29,11 @@ public final class StreamUtils {
         return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
     }
 
-	public static GridPoint3 readVector3i(InputStream stream) throws IOException {
-        return new GridPoint3(readIntLE(stream), readIntLE(stream), readIntLE(stream));
+	public static VLGridPoint3 readVector3i(InputStream stream) throws IOException {
+        return new VLGridPoint3(readIntLE(stream), readIntLE(stream), readIntLE(stream));
     }
 
-	public static GridPoint3 readVector3b(InputStream stream) throws IOException {
+	public static VLGridPoint3 readVector3b(InputStream stream) throws IOException {
         int x = stream.read();
         int y = stream.read();
         int z = stream.read();
@@ -42,7 +42,7 @@ public final class StreamUtils {
             throw new IOException("Not enough bytes to read a vector3b");
         }
 
-        return new GridPoint3((byte)x & 0xff, (byte)y & 0xff, (byte)z & 0xff);
+        return new VLGridPoint3((byte)x & 0xff, (byte)y & 0xff, (byte)z & 0xff);
     }
 
 	public static String readString(InputStream stream) throws IOException {
@@ -62,7 +62,7 @@ public final class StreamUtils {
 	public static HashMap<String, String> readDictionary(InputStream stream) throws IOException {
         int n = readIntLE(stream);
         if (n < 0) {
-            throw new InvalidVoxException("Dictionary too large");
+            throw new VLInvalidVoxException("Dictionary too large");
         }
 
         HashMap<String, String> dict = new HashMap<>(n);
@@ -85,13 +85,13 @@ public final class StreamUtils {
         );
     }
     
-    public static void writeVector3i(GridPoint3 v, OutputStream stream) throws IOException {
+    public static void writeVector3i(VLGridPoint3 v, OutputStream stream) throws IOException {
         writeIntLE(v.x, stream);
         writeIntLE(v.y, stream);
         writeIntLE(v.z, stream);
     }
 
-    public static void writeVector3b(GridPoint3 v, OutputStream stream) throws IOException {
+    public static void writeVector3b(VLGridPoint3 v, OutputStream stream) throws IOException {
         stream.write((byte)v.x);
         stream.write((byte)v.y);
         stream.write((byte)v.z);

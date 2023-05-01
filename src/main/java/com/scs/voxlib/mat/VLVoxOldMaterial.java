@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class VoxOldMaterial {
+public final class VLVoxOldMaterial {
     private final int id;
     private final float weight;
-    private final VoxOldMaterialType type;
-    private final HashMap<VoxOldMaterialProperty, Float> properties;
+    private final VLVoxOldMaterialType type;
+    private final HashMap<VLVoxOldMaterialProperty, Float> properties;
     private final boolean isTotalPower;
 
-    public VoxOldMaterial(int id, float weight, VoxOldMaterialType type, HashMap<VoxOldMaterialProperty, Float> properties, boolean isTotalPower) {
+    public VLVoxOldMaterial(int id, float weight, VLVoxOldMaterialType type, HashMap<VLVoxOldMaterialProperty, Float> properties, boolean isTotalPower) {
         if (type == null) {
             throw new IllegalArgumentException("type must not be null");
         }
@@ -30,7 +30,7 @@ public final class VoxOldMaterial {
 
         this.id = id;
 
-        if (type == VoxOldMaterialType.DIFFUSE) {
+        if (type == VLVoxOldMaterialType.DIFFUSE) {
             if (weight != 1.0) {
                 throw new IllegalArgumentException("A diffuse material must have a weight of 1.0");
             }
@@ -44,7 +44,7 @@ public final class VoxOldMaterial {
         this.isTotalPower = isTotalPower;
     }
 
-    public Optional<Float> getProperty(VoxOldMaterialProperty property) {
+    public Optional<Float> getProperty(VLVoxOldMaterialProperty property) {
         return Optional.ofNullable(properties.getOrDefault(property, null));
     }
 
@@ -60,11 +60,11 @@ public final class VoxOldMaterial {
         return weight;
     }
 
-    public VoxOldMaterialType getType() {
+    public VLVoxOldMaterialType getType() {
         return type;
     }
 
-    public HashMap<VoxOldMaterialProperty, Float> getProperties() {
+    public HashMap<VLVoxOldMaterialProperty, Float> getProperties() {
         return properties;
     }
 
@@ -72,7 +72,7 @@ public final class VoxOldMaterial {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VoxOldMaterial that = (VoxOldMaterial) o;
+        VLVoxOldMaterial that = (VLVoxOldMaterial) o;
         return id == that.id &&
                 Float.compare(that.weight, weight) == 0 &&
                 isTotalPower == that.isTotalPower &&

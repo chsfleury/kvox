@@ -5,10 +5,10 @@ public class VLVoxModelInstance {
 	public final int id;
 	private static int next_id = 0;
 	
-	public final VoxModelBlueprint model;
-	public final GridPoint3 worldOffset;
+	public final VLVoxModelBlueprint model;
+	public final VLGridPoint3 worldOffset;
 	
-	public VLVoxModelInstance(VoxModelBlueprint _model, GridPoint3 _world_offset) {
+	public VLVoxModelInstance(VLVoxModelBlueprint _model, VLGridPoint3 _world_offset) {
 		id = next_id++;
 		model = _model;
 		worldOffset = _world_offset;

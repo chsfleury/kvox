@@ -1,6 +1,6 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.StreamUtils;
+import com.scs.voxlib.VLStreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +15,7 @@ public final class VLVoxPackChunk extends VLVoxChunk {
     }
 
     public static VLVoxPackChunk read(InputStream stream) throws IOException {
-        var modelCount = StreamUtils.readIntLE(stream);
+        var modelCount = VLStreamUtils.readIntLE(stream);
         return new VLVoxPackChunk(modelCount);
     }
 
@@ -25,6 +25,6 @@ public final class VLVoxPackChunk extends VLVoxChunk {
 
     @Override
     protected void writeContent(OutputStream stream) throws IOException {
-        StreamUtils.writeIntLE(modelCount, stream);
+        VLStreamUtils.writeIntLE(modelCount, stream);
     }
 }

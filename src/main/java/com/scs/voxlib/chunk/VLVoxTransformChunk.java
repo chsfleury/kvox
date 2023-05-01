@@ -1,7 +1,7 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.GridPoint3;
-import com.scs.voxlib.StreamUtils;
+import com.scs.voxlib.VLGridPoint3;
+import com.scs.voxlib.VLStreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ public final class VLVoxTransformChunk extends VLVoxChunk {
 
 	public final int id;
 	public int childNodeId;
-	public GridPoint3 transform = new GridPoint3();
+	public VLGridPoint3 transform = new VLGridPoint3();
 
 	public VLVoxTransformChunk(int id) {
 		super(VLChunkFactory.nTRN);
@@ -20,24 +20,24 @@ public final class VLVoxTransformChunk extends VLVoxChunk {
 	}
 
 	public static VLVoxTransformChunk read(InputStream stream) throws IOException {
-		var id = StreamUtils.readIntLE(stream);
+		var id = VLStreamUtils.readIntLE(stream);
 		var chunk = new VLVoxTransformChunk(id);
-		HashMap<String, String> dict = StreamUtils.readDictionary(stream);
-		chunk.childNodeId = StreamUtils.readIntLE(stream);
-		int neg1 = StreamUtils.readIntLE(stream);
+		HashMap<String, String> dict = VLStreamUtils.readDictionary(stream);
+		chunk.childNodeId = VLStreamUtils.readIntLE(stream);
+		int neg1 = VLStreamUtils.readIntLE(stream);
 		if (neg1 != -1) {
 			throw new RuntimeException("neg1 checksum failed");
 		}
-		int layer_id = StreamUtils.readIntLE(stream);
-		int num_frames = StreamUtils.readIntLE(stream);
+		int layer_id = VLStreamUtils.readIntLE(stream);
+		int num_frames = VLStreamUtils.readIntLE(stream);
 
 		// Rotation
 		for (int i=0 ; i<num_frames ; i++) {
-			HashMap<String, String> rot = StreamUtils.readDictionary(stream);
+			HashMap<String, String> rot = VLStreamUtils.readDictionary(stream);
 			if (rot.containsKey("_t")) {
 				//Settings.p("Got _t=" + rot.get("_t"));
 				String[] tokens = rot.get("_t").split(" ");
-				GridPoint3 tmp = new GridPoint3(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+				VLGridPoint3 tmp = new VLGridPoint3(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
 				chunk.transform.set(tmp.x, tmp.y, tmp.z);
 			}
 			if (rot.containsKey("_r")) {
@@ -54,18 +54,18 @@ public final class VLVoxTransformChunk extends VLVoxChunk {
 
 	@Override
 	protected void writeContent(OutputStream stream) throws IOException {
-		StreamUtils.writeIntLE(id, stream);
-		StreamUtils.writeIntLE(0, stream); // dict
-		StreamUtils.writeIntLE(childNodeId, stream);
-		StreamUtils.writeIntLE(-1, stream); // neg
-		StreamUtils.writeIntLE(0, stream); // layer_id
+		VLStreamUtils.writeIntLE(id, stream);
+		VLStreamUtils.writeIntLE(0, stream); // dict
+		VLStreamUtils.writeIntLE(childNodeId, stream);
+		VLStreamUtils.writeIntLE(-1, stream); // neg
+		VLStreamUtils.writeIntLE(0, stream); // layer_id
 		if (transform.x != 0 || transform.y != 0 || transform.z != 0) {
-			StreamUtils.writeIntLE(1, stream); // frames
+			VLStreamUtils.writeIntLE(1, stream); // frames
 			var rot = new HashMap<String, String>();
 			rot.put("_t", String.format("%d %d %d", transform.x, transform.y, transform.z));
-			StreamUtils.writeDictionary(rot, stream);
+			VLStreamUtils.writeDictionary(rot, stream);
 		} else {
-			StreamUtils.writeIntLE(0, stream); // frames
+			VLStreamUtils.writeIntLE(0, stream); // frames
 		}
 
 	}

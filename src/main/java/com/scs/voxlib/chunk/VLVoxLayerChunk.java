@@ -1,7 +1,7 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.GridPoint3;
-import com.scs.voxlib.StreamUtils;
+import com.scs.voxlib.VLGridPoint3;
+import com.scs.voxlib.VLStreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ public final class VLVoxLayerChunk extends VLVoxChunk {
 
 	public int id;
 	public int child_node_id;
-	public GridPoint3 transform = new GridPoint3();
+	public VLGridPoint3 transform = new VLGridPoint3();
 
 	public VLVoxLayerChunk() {
 		super(VLChunkFactory.LAYR);
@@ -22,13 +22,13 @@ public final class VLVoxLayerChunk extends VLVoxChunk {
 		throws IOException
 	{
 		var chunk = new VLVoxLayerChunk();
-		chunk.id = StreamUtils.readIntLE(stream);
-		HashMap<String, String> dict = StreamUtils.readDictionary(stream);
+		chunk.id = VLStreamUtils.readIntLE(stream);
+		HashMap<String, String> dict = VLStreamUtils.readDictionary(stream);
 		//Settings.p("dict=" + dict);
 		/*if (dict.containsKey("_name")) {
 			Settings.p("Layer Name: " + dict.get("_name"));
 		}*/
-		int reserved = StreamUtils.readIntLE(stream);
+		int reserved = VLStreamUtils.readIntLE(stream);
 		return chunk;
 	}
 
@@ -39,9 +39,9 @@ public final class VLVoxLayerChunk extends VLVoxChunk {
 
 	@Override
 	protected void writeContent(OutputStream stream) throws IOException {
-		StreamUtils.writeIntLE(id, stream);
-		StreamUtils.writeIntLE(0, stream); // dict
-		StreamUtils.writeIntLE(0, stream); // reserved
+		VLStreamUtils.writeIntLE(id, stream);
+		VLStreamUtils.writeIntLE(0, stream); // dict
+		VLStreamUtils.writeIntLE(0, stream); // reserved
 	}
 }
 

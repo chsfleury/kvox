@@ -3,13 +3,13 @@ package com.scs.voxlib;
 import java.util.Arrays;
 import java.util.Objects;
 
-public final class VoxModelBlueprint {
+public final class VLVoxModelBlueprint {
 	
 	public final int id;
-    private final GridPoint3 size;
-    private final Voxel[] voxels;
+    private final VLGridPoint3 size;
+    private final VLVoxel[] voxels;
 
-    public VoxModelBlueprint(int _id, GridPoint3 _size, Voxel[] _voxels) { 
+    public VLVoxModelBlueprint(int _id, VLGridPoint3 _size, VLVoxel[] _voxels) {
         if (_size == null || _voxels == null) {
             throw new IllegalArgumentException("Both size and voxels must be non-null");
         }
@@ -19,11 +19,11 @@ public final class VoxModelBlueprint {
         this.voxels = _voxels;
     }
 
-    public GridPoint3 getSize() {
+    public VLGridPoint3 getSize() {
         return size;
     }
 
-    public Voxel[] getVoxels() {
+    public VLVoxel[] getVoxels() {
         return voxels;
     }
 
@@ -31,7 +31,7 @@ public final class VoxModelBlueprint {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VoxModelBlueprint voxModel = (VoxModelBlueprint) o;
+        VLVoxModelBlueprint voxModel = (VLVoxModelBlueprint) o;
         return size.equals(voxModel.size) &&
                 Arrays.equals(voxels, voxModel.voxels);
     }
