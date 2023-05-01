@@ -1,19 +1,18 @@
 package fr.chsfleury.kvox.material
 
 import com.scs.voxlib.mat.VLVoxOldMaterialProperty
-import com.scs.voxlib.mat.VLVoxOldMaterialType
 import java.util.*
 
 class VoxOldMaterial (
     val id: Int,
     private val weight: Float = 0f,
-    private val type: VLVoxOldMaterialType,
-    private val properties: Map<VLVoxOldMaterialProperty, Float?>,
+    private val type: VoxOldMaterialType,
+    private val properties: Map<VoxOldMaterialProperty, Float?>,
     private val isTotalPower: Boolean = false
 ) {
     init {
         require(!(id < 1 || id > 255)) { "id must be in [1..255]" }
-        if (type == VLVoxOldMaterialType.DIFFUSE) {
+        if (type == VoxOldMaterialType.DIFFUSE) {
             require(weight.toDouble() == 1.0) { "A diffuse material must have a weight of 1.0" }
         } else {
             require(weight > 0.0 && weight <= 1.0) { "weight must be in (0.0..1.0]" }
