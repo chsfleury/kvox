@@ -1,6 +1,5 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLStreamUtils
 import com.scs.voxlib.mat.VLVoxOldMaterial
 import com.scs.voxlib.mat.VLVoxOldMaterialProperty
 import com.scs.voxlib.mat.VLVoxOldMaterialType
@@ -32,7 +31,7 @@ class VoxMATTChunk(
             val properties = HashMap<VLVoxOldMaterialProperty, Float>(propCount)
             for (prop in VLVoxOldMaterialProperty.values()) {
                 if (prop != VLVoxOldMaterialProperty.IS_TOTAL_POWER && prop.isSet(propBits)) {
-                    properties[prop] = VLStreamUtils.readFloatLE(stream)
+                    properties[prop] = stream.readFloatLittleEndian()
                 }
             }
             return try {

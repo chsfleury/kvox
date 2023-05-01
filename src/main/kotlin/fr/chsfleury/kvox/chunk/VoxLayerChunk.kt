@@ -8,7 +8,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-class VoxLayerChunk(): VoxChunk(ChunkFactory.LAYR) {
+class VoxLayerChunk: VoxChunk(ChunkFactory.LAYR) {
 
     var id = 0
     private var transform = VLGridPoint3()

@@ -1,8 +1,8 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLStreamUtils
 import fr.chsfleury.kvox.InvalidVoxException
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
+import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -22,8 +22,8 @@ open class VoxChunk(
                 val contentBytes = contentStream.toByteArray()
                 writeChildren(childStream)
                 val childBytes = childStream.toByteArray()
-                VLStreamUtils.writeIntLE(contentBytes.size, stream)
-                VLStreamUtils.writeIntLE(childBytes.size, stream)
+                stream.writeIntLittleEndian(contentBytes.size)
+                stream.writeIntLittleEndian(childBytes.size)
                 stream.write(contentBytes)
                 stream.write(childBytes)
             }

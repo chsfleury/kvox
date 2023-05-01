@@ -1,7 +1,7 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLStreamUtils
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
+import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -36,7 +36,7 @@ class VoxRGBAChunk(initialPalette: IntArray? = null): VoxChunk(ChunkFactory.RGBA
     override fun writeContent(stream: OutputStream) {
         for (i in 0..254) {
             val abgr = ARGBToABGR(palette[i + 1])
-            VLStreamUtils.writeIntLE(abgr, stream)
+            stream.writeIntLittleEndian(abgr)
         }
     }
 

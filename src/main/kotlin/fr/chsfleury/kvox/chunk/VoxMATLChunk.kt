@@ -1,6 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.mat.VLVoxMaterial
+import fr.chsfleury.kvox.material.VoxMaterial
 import fr.chsfleury.kvox.utils.StreamUtils.readDictionary
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeDictionary
@@ -10,7 +10,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxMATLChunk(
-    val material: VLVoxMaterial
+    val material: VoxMaterial
 ): VoxChunk(ChunkFactory.MATL) {
 
     companion object {
@@ -19,7 +19,7 @@ class VoxMATLChunk(
         fun read(stream: InputStream): VoxMATLChunk {
             val id = stream.readIntLittleEndian()
             val props = stream.readDictionary()
-            val material = VLVoxMaterial(id, props)
+            val material = VoxMaterial(id, props)
             return VoxMATLChunk(material)
         }
 
@@ -28,7 +28,7 @@ class VoxMATLChunk(
     @Throws(IOException::class)
     override fun writeContent(stream: OutputStream) {
         stream.writeIntLittleEndian(material.id)
-        stream.writeDictionary(material.props)
+        stream.writeDictionary(material.properties)
     }
 
 }

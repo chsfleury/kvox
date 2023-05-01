@@ -1,10 +1,10 @@
 package fr.chsfleury.kvox.chunk
 
 import com.scs.voxlib.VLGridPoint3
-import com.scs.voxlib.VLVoxModelInstance
 import com.scs.voxlib.VLVoxModelBlueprint
-import com.scs.voxlib.mat.VLVoxMaterial
+import com.scs.voxlib.VLVoxModelInstance
 import com.scs.voxlib.mat.VLVoxOldMaterial
+import fr.chsfleury.kvox.material.VoxMaterial
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -14,7 +14,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     private val models = mutableMapOf<Int, VLVoxModelBlueprint>()
     private val chunkModelInstances = mutableListOf<VLVoxModelInstance>()
     private var chunkPalette: IntArray = VoxRGBAChunk.DEFAULT_PALETTE
-    private val chunkMaterials = mutableMapOf<Int, VLVoxMaterial>()
+    private val chunkMaterials = mutableMapOf<Int, VoxMaterial>()
     private val oldMaterials = mutableMapOf<Int, VLVoxOldMaterial>()
     private val shapeChunks = mutableMapOf<Int, VoxShapeChunk>()
     private val transformChunks = mutableMapOf<Int, VoxTransformChunk>()
@@ -23,7 +23,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
 
     val palette: IntArray get() = chunkPalette
     val modelInstances: List<VLVoxModelInstance> get() = chunkModelInstances
-    val materials: Map<Int, VLVoxMaterial> get() = chunkMaterials
+    val materials: Map<Int, VoxMaterial> get() = chunkMaterials
 
     /**
      * Chunks SIZE and XYZI always come in pairs.
