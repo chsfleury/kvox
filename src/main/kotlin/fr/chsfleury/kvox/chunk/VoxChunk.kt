@@ -1,7 +1,7 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLInvalidVoxException
 import com.scs.voxlib.VLStreamUtils
+import fr.chsfleury.kvox.InvalidVoxException
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -48,7 +48,7 @@ open class VoxChunk(
         fun readChunk(inputStream: InputStream, expectedID: String?): VoxChunk? {
             val id = getChunkId(inputStream) ?: return null
             if (expectedID != null && id != expectedID) {
-                throw VLInvalidVoxException("$expectedID chunk expected, got $id")
+                throw InvalidVoxException("$expectedID chunk expected, got $id")
             }
             val length = inputStream.readIntLittleEndian()
             val childrenLength = inputStream.readIntLittleEndian()
@@ -64,7 +64,7 @@ open class VoxChunk(
         private fun readChunkBytes(chunkId: String, inputStream: InputStream, length: Int): ByteArray {
             val chunkBytes = ByteArray(length)
             if (length > 0 && inputStream.read(chunkBytes) != length) {
-                throw VLInvalidVoxException("Chunk '$chunkId' is incomplete")
+                throw InvalidVoxException("Chunk '$chunkId' is incomplete")
             }
             return chunkBytes
         }
@@ -83,7 +83,7 @@ open class VoxChunk(
                     // There's no chunk here, this is fine.
                     return null
                 }
-                throw VLInvalidVoxException("Incomplete chunk ID")
+                throw InvalidVoxException("Incomplete chunk ID")
             }
             return chunkID.toString(Charsets.UTF_8)
         }

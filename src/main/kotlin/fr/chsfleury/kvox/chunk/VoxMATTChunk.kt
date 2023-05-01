@@ -1,10 +1,10 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLInvalidVoxException
 import com.scs.voxlib.VLStreamUtils
 import com.scs.voxlib.mat.VLVoxOldMaterial
 import com.scs.voxlib.mat.VLVoxOldMaterialProperty
 import com.scs.voxlib.mat.VLVoxOldMaterialType
+import fr.chsfleury.kvox.InvalidVoxException
 import fr.chsfleury.kvox.utils.StreamUtils.readFloatLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import java.io.IOException
@@ -21,7 +21,7 @@ class VoxMATTChunk(
             val id = stream.readIntLittleEndian()
             val typeIndex = stream.readIntLittleEndian()
             val matType = VLVoxOldMaterialType.fromIndex(typeIndex)
-                .orElseThrow { VLInvalidVoxException("Unknown material type $typeIndex") }
+                .orElseThrow { InvalidVoxException("Unknown material type $typeIndex") }
             val weight = stream.readFloatLittleEndian()
             val propBits = stream.readIntLittleEndian()
             val isTotalPower = VLVoxOldMaterialProperty.IS_TOTAL_POWER.isSet(propBits)
@@ -39,7 +39,7 @@ class VoxMATTChunk(
                 val material = VLVoxOldMaterial(id, weight, matType, properties, isTotalPower)
                 VoxMATTChunk(material)
             } catch (e: IllegalArgumentException) {
-                throw VLInvalidVoxException("Material with ID $id is invalid", e)
+                throw InvalidVoxException("Material with ID $id is invalid", e)
             }
         }
 

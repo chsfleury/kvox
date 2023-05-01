@@ -1,6 +1,6 @@
 package fr.chsfleury.kvox.impl
 
-import com.scs.voxlib.VLInvalidVoxException
+import fr.chsfleury.kvox.InvalidVoxException
 import fr.chsfleury.kvox.VoxReader
 import fr.chsfleury.kvox.chunk.VoxChunk
 import fr.chsfleury.kvox.chunk.VoxRootChunk
@@ -17,26 +17,26 @@ class DefaultVoxReader(private val inputStream: InputStream): VoxReader<VoxRootC
         checkMagicBytes()
         val voxFileVersion = checkVersion()
 
-        val voxChunk = VoxChunk.readChunk(inputStream) ?: throw VLInvalidVoxException("No root chunk present in the file")
-        val rootChunk = voxChunk as? VoxRootChunk ?: throw VLInvalidVoxException("First chunk is not of ID 'MAIN'")
+        val voxChunk = VoxChunk.readChunk(inputStream) ?: throw InvalidVoxException("No root chunk present in the file")
+        val rootChunk = voxChunk as? VoxRootChunk ?: throw InvalidVoxException("First chunk is not of ID 'MAIN'")
         return DefaultVoxFile(voxFileVersion, rootChunk)
     }
 
     private fun checkMagicBytes() {
         val magicBytes = ByteArray(MAGIC_BYTES.size)
         if (inputStream.read(magicBytes) != MAGIC_BYTES.size) {
-            throw VLInvalidVoxException("Could not read magic bytes")
+            throw InvalidVoxException("Could not read magic bytes")
         }
 
         if (!magicBytes.contentEquals(MAGIC_BYTES)) {
-            throw VLInvalidVoxException("Invalid magic bytes")
+            throw InvalidVoxException("Invalid magic bytes")
         }
     }
 
     private fun checkVersion(): Int {
         val voxFileVersion = inputStream.readIntLittleEndian()
         if (voxFileVersion < VOX_FORMAT_VERSION) {
-            throw VLInvalidVoxException("Vox versions older than $VOX_FORMAT_VERSION are not supported")
+            throw InvalidVoxException("Vox versions older than $VOX_FORMAT_VERSION are not supported")
         }
         return voxFileVersion
     }

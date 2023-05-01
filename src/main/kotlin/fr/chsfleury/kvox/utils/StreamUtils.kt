@@ -1,7 +1,7 @@
 package fr.chsfleury.kvox.utils
 
 import com.scs.voxlib.VLGridPoint3
-import com.scs.voxlib.VLInvalidVoxException
+import fr.chsfleury.kvox.InvalidVoxException
 import fr.chsfleury.kvox.utils.ByteArrays.toBufferLittleEndian
 import java.io.IOException
 import java.io.InputStream
@@ -69,7 +69,7 @@ object StreamUtils {
     fun InputStream.readDictionary(): Map<String, String> {
         val n = readIntLittleEndian()
         if (n < 0) {
-            throw VLInvalidVoxException("Dictionary too large")
+            throw InvalidVoxException("Dictionary too large")
         }
         val dict = HashMap<String, String>(n)
         for (i in 0 until n) {
