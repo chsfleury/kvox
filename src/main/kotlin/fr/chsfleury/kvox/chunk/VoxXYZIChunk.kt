@@ -1,9 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.StreamUtils
 import com.scs.voxlib.Voxel
-import com.scs.voxlib.chunk.VLChunkFactory
-import com.scs.voxlib.chunk.VLVoxXYZIChunk
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.readVector3b
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian

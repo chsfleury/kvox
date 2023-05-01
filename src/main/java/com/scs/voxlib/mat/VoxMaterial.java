@@ -1,6 +1,5 @@
 package com.scs.voxlib.mat;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;

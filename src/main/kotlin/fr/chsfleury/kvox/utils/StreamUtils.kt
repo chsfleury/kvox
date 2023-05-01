@@ -2,7 +2,6 @@ package fr.chsfleury.kvox.utils
 
 import com.scs.voxlib.GridPoint3
 import com.scs.voxlib.InvalidVoxException
-import com.scs.voxlib.StreamUtils
 import fr.chsfleury.kvox.utils.ByteArrays.toBufferLittleEndian
 import java.io.IOException
 import java.io.InputStream

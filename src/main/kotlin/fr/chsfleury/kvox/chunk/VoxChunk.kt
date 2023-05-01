@@ -2,7 +2,6 @@ package fr.chsfleury.kvox.chunk
 
 import com.scs.voxlib.InvalidVoxException
 import com.scs.voxlib.StreamUtils
-import com.scs.voxlib.chunk.VLChunkFactory
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

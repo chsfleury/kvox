@@ -1,9 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
 import com.scs.voxlib.GridPoint3
-import com.scs.voxlib.StreamUtils
-import com.scs.voxlib.chunk.VLChunkFactory
-import com.scs.voxlib.chunk.VLVoxLayerChunk
 import fr.chsfleury.kvox.utils.StreamUtils.readDictionary
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian

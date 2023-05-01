@@ -1,7 +1,5 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.StreamUtils
-import com.scs.voxlib.chunk.VLVoxPackChunk
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
 import java.io.IOException

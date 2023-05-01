@@ -2,8 +2,6 @@ package fr.chsfleury.kvox.chunk
 
 import com.scs.voxlib.InvalidVoxException
 import com.scs.voxlib.StreamUtils
-import com.scs.voxlib.chunk.VLChunkFactory
-import com.scs.voxlib.chunk.VLVoxMATTChunk
 import com.scs.voxlib.mat.VoxOldMaterial
 import com.scs.voxlib.mat.VoxOldMaterialProperty
 import com.scs.voxlib.mat.VoxOldMaterialType

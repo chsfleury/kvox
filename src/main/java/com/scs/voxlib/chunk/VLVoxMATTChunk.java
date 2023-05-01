@@ -1,6 +1,7 @@
 package com.scs.voxlib.chunk;
 
-import com.scs.voxlib.*;
+import com.scs.voxlib.InvalidVoxException;
+import com.scs.voxlib.StreamUtils;
 import com.scs.voxlib.mat.VoxOldMaterial;
 import com.scs.voxlib.mat.VoxOldMaterialProperty;
 import com.scs.voxlib.mat.VoxOldMaterialType;

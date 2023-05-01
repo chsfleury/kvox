@@ -1,6 +1,5 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.StreamUtils
 import fr.chsfleury.kvox.utils.StreamUtils.readDictionary
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian

@@ -1,6 +1,5 @@
 package fr.chsfleury.kvox.impl
 
-import com.scs.voxlib.VLVoxFile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.FileInputStream
