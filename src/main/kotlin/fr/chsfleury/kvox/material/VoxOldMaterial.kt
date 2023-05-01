@@ -1,6 +1,5 @@
 package fr.chsfleury.kvox.material
 
-import com.scs.voxlib.mat.VLVoxOldMaterialProperty
 import java.util.*
 
 class VoxOldMaterial (

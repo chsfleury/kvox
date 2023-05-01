@@ -1,6 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLVoxel
+import fr.chsfleury.kvox.Voxel
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.readVector3b
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
@@ -10,24 +10,21 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxXYZIChunk(
-    val voxels: Array<VLVoxel?>
+    val voxels: Array<Voxel>
 ): VoxChunk(ChunkFactory.XYZI) {
-
-    constructor(voxelCount: Int) : this(arrayOfNulls<VLVoxel>(voxelCount))
-    constructor(voxels: Collection<VLVoxel?>) : this(voxels.toTypedArray())
 
     companion object {
 
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxXYZIChunk {
             val voxelCount = stream.readIntLittleEndian()
-            val chunk = VoxXYZIChunk(voxelCount)
+            val voxels = mutableListOf<Voxel>()
             for (i in 0 until voxelCount) {
                 val position = stream.readVector3b()
                 val colorIndex = (stream.read() and 0xff).toByte()
-                chunk.voxels[i] = VLVoxel(position, colorIndex)
+                voxels.add(Voxel(position, colorIndex))
             }
-            return chunk
+            return VoxXYZIChunk(voxels.toTypedArray())
         }
 
     }
@@ -36,8 +33,8 @@ class VoxXYZIChunk(
     override fun writeContent(stream: OutputStream) {
         stream.writeIntLittleEndian(voxels.size)
         for (voxel in voxels) {
-            stream.writeVector3b(voxel!!.position)
-            stream.write(voxel.colourIndex)
+            stream.writeVector3b(voxel.position)
+            stream.write(voxel.colourIndex.toInt())
         }
     }
 

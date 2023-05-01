@@ -1,8 +1,8 @@
 package fr.chsfleury.kvox.chunk
 
-import com.scs.voxlib.VLGridPoint3
-import com.scs.voxlib.VLVoxModelBlueprint
-import com.scs.voxlib.VLVoxModelInstance
+import fr.chsfleury.kvox.Vec3
+import fr.chsfleury.kvox.VoxModelBlueprint
+import fr.chsfleury.kvox.VoxModelInstance
 import fr.chsfleury.kvox.material.VoxMaterial
 import fr.chsfleury.kvox.material.VoxOldMaterial
 import java.io.IOException
@@ -11,8 +11,8 @@ import java.io.OutputStream
 
 class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
 
-    private val models = mutableMapOf<Int, VLVoxModelBlueprint>()
-    private val chunkModelInstances = mutableListOf<VLVoxModelInstance>()
+    private val models = mutableMapOf<Int, VoxModelBlueprint>()
+    private val chunkModelInstances = mutableListOf<VoxModelInstance>()
     private var chunkPalette: IntArray = VoxRGBAChunk.DEFAULT_PALETTE
     private val chunkMaterials = mutableMapOf<Int, VoxMaterial>()
     private val oldMaterials = mutableMapOf<Int, VoxOldMaterial>()
@@ -22,7 +22,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     private var rootTransform: VoxTransformChunk? = null
 
     val palette: IntArray get() = chunkPalette
-    val modelInstances: List<VLVoxModelInstance> get() = chunkModelInstances
+    val modelInstances: List<VoxModelInstance> get() = chunkModelInstances
     val materials: Map<Int, VoxMaterial> get() = chunkMaterials
 
     /**
@@ -30,7 +30,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
      * This is a temporary variable that remembers the last SIZE, so that
      * it can be used for the next XYZI chunk.
      */
-    private var size: VLGridPoint3? = null
+    private var size: Vec3? = null
     private val children: MutableList<VoxChunk> = mutableListOf()
 
     companion object {
@@ -80,7 +80,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
                 size = chunk.size
             }
             is VoxXYZIChunk -> {
-                models[models.size] = VLVoxModelBlueprint(models.size, size, chunk.voxels)
+                models[models.size] = VoxModelBlueprint(models.size, size!!, chunk.voxels)
             }
             is VoxRGBAChunk -> {
                 chunkPalette = chunk.palette
@@ -116,8 +116,8 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
         }
     }
 
-    private fun findShapeOrGroupParent(shapeId: Int): VLGridPoint3 {
-        val offset = VLGridPoint3(0, 0, 0)
+    private fun findShapeOrGroupParent(shapeId: Int): Vec3 {
+        val offset = Vec3(0, 0, 0)
         for (transformChunk in transformChunks.values) {
             if (transformChunk.childNodeId == shapeId) {
                 offset.add(transformChunk.transform)
@@ -129,8 +129,8 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     }
 
 
-    private fun findTransformParent(transformId: Int): VLGridPoint3 {
-        val offset = VLGridPoint3(0, 0, 0)
+    private fun findTransformParent(transformId: Int): Vec3 {
+        val offset = Vec3(0, 0, 0)
         for (groupChunk in groupChunks.values) {
             if (groupChunk.childIds.contains(transformId)) {
                 val subOffset = findShapeOrGroupParent(groupChunk.id)
@@ -147,8 +147,8 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     }
 
 
-    private fun processTransformChunk(transformChunk: VoxTransformChunk?, pos: VLGridPoint3) {
-        val newPos = VLGridPoint3(pos)
+    private fun processTransformChunk(transformChunk: VoxTransformChunk?, pos: Vec3) {
+        val newPos = Vec3(pos)
         if (groupChunks.containsKey(transformChunk!!.childNodeId)) {
             processGroupChunk(groupChunks[transformChunk.childNodeId]!!, newPos)
         } else if (shapeChunks.containsKey(transformChunk.childNodeId)) {
@@ -157,21 +157,21 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     }
 
 
-    private fun processGroupChunk(groupChunk: VoxGroupChunk, pos: VLGridPoint3) {
+    private fun processGroupChunk(groupChunk: VoxGroupChunk, pos: Vec3) {
         for (childId in groupChunk.childIds) {
             val trn = transformChunks[childId]
-            val newPos = VLGridPoint3(pos)
+            val newPos = Vec3(pos)
             newPos.add(trn!!.transform)
             processTransformChunk(trn, newPos)
         }
     }
 
 
-    private fun processShapeChunk(shapeChunk: VoxShapeChunk, pos: VLGridPoint3) {
+    private fun processShapeChunk(shapeChunk: VoxShapeChunk, pos: Vec3) {
         for (modelId in shapeChunk.modelIds) {
             val model = models[modelId]
             if (model!!.voxels.isNotEmpty()) {
-                val instance = VLVoxModelInstance(model, VLGridPoint3(pos))
+                val instance = VoxModelInstance(model, Vec3(pos))
                 chunkModelInstances.add(instance)
             }
         }

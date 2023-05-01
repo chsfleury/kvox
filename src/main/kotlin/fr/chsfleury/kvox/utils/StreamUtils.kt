@@ -1,7 +1,7 @@
 package fr.chsfleury.kvox.utils
 
-import com.scs.voxlib.VLGridPoint3
 import fr.chsfleury.kvox.InvalidVoxException
+import fr.chsfleury.kvox.Vec3
 import fr.chsfleury.kvox.utils.ByteArrays.toBufferLittleEndian
 import java.io.IOException
 import java.io.InputStream
@@ -31,21 +31,21 @@ object StreamUtils {
     }
 
     @Throws(IOException::class)
-    fun InputStream.readVector3i() = VLGridPoint3(
+    fun InputStream.readVector3i() = Vec3(
         readIntLittleEndian(),
         readIntLittleEndian(),
         readIntLittleEndian()
     )
 
     @Throws(IOException::class)
-    fun InputStream.readVector3b(): VLGridPoint3 {
+    fun InputStream.readVector3b(): Vec3 {
         val x = read()
         val y = read()
         val z = read()
         if (x == -1 || y == -1 || z == -1) {
             throw IOException("Not enough bytes to read a vector3b")
         }
-        return VLGridPoint3(
+        return Vec3(
             x and 0xff,
             y and 0xff,
             z and 0xff
@@ -90,14 +90,14 @@ object StreamUtils {
     )
 
     @Throws(IOException::class)
-    fun OutputStream.writeVector3i(v: VLGridPoint3) {
+    fun OutputStream.writeVector3i(v: Vec3) {
         writeIntLittleEndian(v.x)
         writeIntLittleEndian(v.y)
         writeIntLittleEndian(v.z)
     }
 
     @Throws(IOException::class)
-    fun OutputStream.writeVector3b(v: VLGridPoint3) {
+    fun OutputStream.writeVector3b(v: Vec3) {
         write(v.x)
         write(v.y)
         write(v.z)
