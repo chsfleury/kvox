@@ -47,11 +47,11 @@ class CreateNewFileTest {
         // Set voxels using the color indices.
 
         // Set voxels using the color indices.
-        val voxels = ArrayList<Voxel>()
+        val voxels = mutableListOf<Voxel>()
         voxels.add(Voxel(1, 1, 0, ID_GREEN))
         voxels.add(Voxel(1, 1, 1, ID_YELLOW))
         voxels.add(Voxel(1, 1, 2, ID_RED))
-        val model = VoxXYZIChunk(voxels.toTypedArray())
+        val model = VoxXYZIChunk(voxels)
 
         // The following chunks are the necessary containers for our model:
 

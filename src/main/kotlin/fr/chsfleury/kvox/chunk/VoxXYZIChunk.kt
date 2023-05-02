@@ -10,7 +10,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxXYZIChunk(
-    val voxels: Array<Voxel>
+    val voxels: List<Voxel>
 ): VoxChunk(ChunkFactory.XYZI) {
 
     companion object {
@@ -18,13 +18,12 @@ class VoxXYZIChunk(
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxXYZIChunk {
             val voxelCount = stream.readIntLittleEndian()
-            val voxels = mutableListOf<Voxel>()
-            for (i in 0 until voxelCount) {
+            val voxels = List(voxelCount) {
                 val position = stream.readVector3b()
                 val colorIndex = (stream.read() and 0xff).toByte()
-                voxels.add(Voxel(position, colorIndex))
+                Voxel(position, colorIndex)
             }
-            return VoxXYZIChunk(voxels.toTypedArray())
+            return VoxXYZIChunk(voxels)
         }
 
     }
