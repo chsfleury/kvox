@@ -11,7 +11,9 @@ class VoxPackChunk(
 ): VoxChunk(ChunkFactory.PACK) {
 
     @Throws(IOException::class)
-    override fun writeContent(stream: OutputStream) = stream.writeIntLittleEndian(modelCount)
+    override fun writeContent(stream: OutputStream) {
+        stream.writeIntLittleEndian(modelCount)
+    }
 
     companion object {
 

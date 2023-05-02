@@ -81,36 +81,38 @@ object StreamUtils {
     }
 
     @Throws(IOException::class)
-    fun OutputStream.writeIntLittleEndian(v: Int) = write(
-        ByteBuffer
-            .allocate(4)
-            .order(ByteOrder.LITTLE_ENDIAN)
-            .putInt(v)
-            .array()
-    )
+    fun OutputStream.writeIntLittleEndian(v: Int) = apply {
+        write(
+            ByteBuffer
+                .allocate(4)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putInt(v)
+                .array()
+        )
+    }
 
     @Throws(IOException::class)
-    fun OutputStream.writeVector3i(v: Vec3) {
+    fun OutputStream.writeVector3i(v: Vec3) = apply {
         writeIntLittleEndian(v.x)
         writeIntLittleEndian(v.y)
         writeIntLittleEndian(v.z)
     }
 
     @Throws(IOException::class)
-    fun OutputStream.writeVector3b(v: Vec3) {
+    fun OutputStream.writeVector3b(v: Vec3) = apply {
         write(v.x)
         write(v.y)
         write(v.z)
     }
 
     @Throws(IOException::class)
-    fun OutputStream.writeString(s: String) {
+    fun OutputStream.writeString(s: String) = apply {
         writeIntLittleEndian(s.length)
         write(s.toByteArray(Charsets.UTF_8))
     }
 
     @Throws(IOException::class)
-    fun OutputStream.writeDictionary(dict: Map<String, String>) {
+    fun OutputStream.writeDictionary(dict: Map<String, String>) = apply {
         writeIntLittleEndian(dict.size)
         for ((key, value) in dict) {
             writeString(key)

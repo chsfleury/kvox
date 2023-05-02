@@ -31,12 +31,14 @@ class VoxShapeChunk(
 
     @Throws(IOException::class)
     override fun writeContent(stream: OutputStream) {
-        stream.writeIntLittleEndian(id)
-        stream.writeIntLittleEndian(0)
-        stream.writeIntLittleEndian(modelIds.size)
+        stream
+            .writeIntLittleEndian(id)
+            .writeIntLittleEndian(0)
+            .writeIntLittleEndian(modelIds.size)
         for (modelId in modelIds) {
-            stream.writeIntLittleEndian(modelId)
-            stream.writeIntLittleEndian(0)
+            stream
+                .writeIntLittleEndian(modelId)
+                .writeIntLittleEndian(0)
         }
     }
 }
