@@ -8,25 +8,23 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxShapeChunk(
-    val id: Int
+    val id: Int,
+    val modelIds: List<Int>
 ): VoxChunk(ChunkFactory.nSHP) {
-
-    val modelIds: MutableList<Int> = mutableListOf()
 
     companion object {
 
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxShapeChunk {
             val id = stream.readIntLittleEndian()
-            val chunk = VoxShapeChunk(id)
-            val dict = stream.readDictionary()
+            stream.readDictionary()
             val numModels = stream.readIntLittleEndian()
-            for (i in 0 until numModels) {
-                val modelId = stream.readIntLittleEndian()
-                val dict = stream.readDictionary()
-                chunk.modelIds.add(modelId)
+            val modelIds = List(numModels) {
+                stream.readIntLittleEndian().also {
+                    stream.readDictionary()
+                }
             }
-            return chunk
+            return VoxShapeChunk(id, modelIds)
         }
 
     }

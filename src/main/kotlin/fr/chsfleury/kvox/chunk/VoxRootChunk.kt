@@ -40,8 +40,6 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
             val root = VoxRootChunk()
             var first = readChunk(childrenStream)
             if (first is VoxPackChunk) {
-                //VoxPackChunk pack = (VoxPackChunk)first;
-                //modelCount = pack.getModelCount(); // Ignore this, it is obsolete
                 first = null
             }
             while (childrenStream.available() > 0) {

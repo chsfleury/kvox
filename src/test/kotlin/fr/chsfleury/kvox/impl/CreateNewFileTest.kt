@@ -59,8 +59,7 @@ class CreateNewFileTest {
         val groupTransform = VoxTransformChunk(0)
 
         val shapeTransform = VoxTransformChunk(2)
-        val shape = VoxShapeChunk(3)
-        shape.modelIds.add(0) // id of the 1st model
+        val shape = VoxShapeChunk(3, listOf(0)) // id of the 1st model
 
         shapeTransform.childNodeId = shape.id
         val group = VoxGroupChunk(1, listOf(shapeTransform.id))
