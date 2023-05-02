@@ -8,7 +8,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.nio.charset.StandardCharsets
 
 open class VoxChunk(
     val type: String
@@ -17,7 +16,7 @@ open class VoxChunk(
     fun writeTo(stream: OutputStream) {
         ByteArrayOutputStream().use { contentStream ->
             ByteArrayOutputStream().use { childStream ->
-                stream.write(type.toByteArray(StandardCharsets.UTF_8))
+                stream.write(type.toByteArray())
                 writeContent(contentStream)
                 val contentBytes = contentStream.toByteArray()
                 writeChildren(childStream)

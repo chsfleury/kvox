@@ -8,24 +8,21 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxGroupChunk(
-    val id: Int
+    val id: Int,
+    val childIds: List<Int>
 ): VoxChunk(ChunkFactory.nGRP) {
-
-    var childIds: MutableList<Int> = mutableListOf()
 
     companion object {
 
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxGroupChunk {
             val id = stream.readIntLittleEndian()
-            val chunk = VoxGroupChunk(id)
-            val dict = stream.readDictionary()
+            stream.readDictionary()
             val numChildren = stream.readIntLittleEndian()
-            for (i in 0 until numChildren) {
-                val childId = stream.readIntLittleEndian()
-                chunk.childIds.add(childId)
+            val childIds = List(numChildren) {
+                stream.readIntLittleEndian()
             }
-            return chunk
+            return VoxGroupChunk(id, childIds)
         }
 
     }

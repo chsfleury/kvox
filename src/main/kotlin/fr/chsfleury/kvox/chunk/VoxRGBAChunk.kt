@@ -1,12 +1,15 @@
 package fr.chsfleury.kvox.chunk
 
+import fr.chsfleury.kvox.utils.IntBytes
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-class VoxRGBAChunk(initialPalette: IntArray? = null): VoxChunk(ChunkFactory.RGBA) {
+class VoxRGBAChunk(
+    initialPalette: IntArray? = null
+): VoxChunk(ChunkFactory.RGBA) {
 
     /**
      * The returned colour integers are in the ARGB format, i.e.
@@ -26,17 +29,15 @@ class VoxRGBAChunk(initialPalette: IntArray? = null): VoxChunk(ChunkFactory.RGBA
         if (initialPalette != null) {
             var i = 1
             while (i < 256 && i < initialPalette.size) {
-                this.palette[i] = initialPalette[i]
-                i++
+                this.palette[i] = initialPalette[i++]
             }
         }
     }
 
     @Throws(IOException::class)
     override fun writeContent(stream: OutputStream) {
-        for (i in 0..254) {
-            val abgr = ARGBToABGR(palette[i + 1])
-            stream.writeIntLittleEndian(abgr)
+        for (i in 1..255) {
+            stream.writeIntLittleEndian(convertARGBToABGR(palette[i]))
         }
     }
 
@@ -44,28 +45,21 @@ class VoxRGBAChunk(initialPalette: IntArray? = null): VoxChunk(ChunkFactory.RGBA
 
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxRGBAChunk {
-            val chunk = VoxRGBAChunk()
-            for (i in 0..254) {
-                val abgr = stream.readIntLittleEndian()
-                chunk.palette[i + 1] = ABGRToARGB(abgr)
+            val palette = IntArray(256) { index ->
+                if (index == 0) 0
+                else convertABGRToARGB(stream.readIntLittleEndian())
             }
-            return chunk
+            return VoxRGBAChunk(palette)
         }
 
-        private fun ABGRToARGB(abgr: Int): Int {
-            val alpha = abgr and -0x1000000 shr 24
-            val blue = abgr and 0xFF0000 shr 16
-            val green = abgr and 0xFF00 shr 8
-            val red = abgr and 0xFF
-            return blue or (green shl 8) or (red shl 16) or (alpha shl 24)
+        private fun convertABGRToARGB(abgr: Int): Int {
+            val (alpha, blue, green, red) = IntBytes(abgr)
+            return IntBytes.toInt(blue, green, red, alpha)
         }
 
-        private fun ARGBToABGR(argb: Int): Int {
-            val alpha = argb and -0x1000000 shr 24
-            val red = argb and 0xFF0000 shr 16
-            val green = argb and 0xFF00 shr 8
-            val blue = argb and 0xFF
-            return red or (green shl 8) or (blue shl 16) or (alpha shl 24)
+        private fun convertARGBToABGR(argb: Int): Int {
+            val (alpha, red, green, blue) = IntBytes(argb)
+            return IntBytes.toInt(red, green, blue, alpha)
         }
 
         val DEFAULT_PALETTE = intArrayOf(

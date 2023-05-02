@@ -8,20 +8,17 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-class VoxLayerChunk: VoxChunk(ChunkFactory.LAYR) {
-
-    var id = 0
+class VoxLayerChunk(val id: Int): VoxChunk(ChunkFactory.LAYR) {
     private var transform = Vec3()
 
     companion object {
 
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxLayerChunk {
-            val chunk = VoxLayerChunk()
-            chunk.id = stream.readIntLittleEndian()
-            val dict = stream.readDictionary()
-            val reserved = stream.readIntLittleEndian()
-            return chunk
+            val id = stream.readIntLittleEndian()
+            stream.readDictionary()
+            stream.readIntLittleEndian()
+            return VoxLayerChunk(id)
         }
 
     }

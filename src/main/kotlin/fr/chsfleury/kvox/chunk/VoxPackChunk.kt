@@ -7,7 +7,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxPackChunk(
-    val modelCount: Int
+    private val modelCount: Int
 ): VoxChunk(ChunkFactory.PACK) {
 
     @Throws(IOException::class)
