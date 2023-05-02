@@ -1,4 +1,4 @@
-package com.scs;
+package com.scs.old;
 
 import com.scs.voxlib.VLVoxFile;
 import com.scs.voxlib.VLVoxWriter;

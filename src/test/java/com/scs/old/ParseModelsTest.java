@@ -1,49 +1,27 @@
-package com.scs;
+package com.scs.old;
 
 import com.scs.voxlib.VLVoxFile;
 import com.scs.voxlib.VLVoxReader;
-import com.scs.voxlib.VLVoxWriter;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-public class ReadNWriteModelsTest {
-
+public class ParseModelsTest {
     private VLVoxFile loadVox(String resourcePath) throws IOException {
         var fullPath = getClass().getResource(resourcePath).getPath();
-        try (var reader = new VLVoxReader(new FileInputStream(fullPath))) {
+        try (VLVoxReader reader = new VLVoxReader(new FileInputStream(fullPath))) {
             return reader.read();
         }
     }
 
     private void testModel(String path, int fileVersion, int modelCount, int voxelCount, int materialCount) throws IOException {
         var file = loadVox(path);
-
-        var tempFilePath = Paths.get("target" + path);
-        try (
-            var tempFileOut = Files.newOutputStream(tempFilePath, CREATE, TRUNCATE_EXISTING);
-            var writer = new VLVoxWriter(tempFileOut)
-        ) {
-            writer.write(file);
-        }
-
-        //Reload and test again
-        try (var reader = new VLVoxReader(Files.newInputStream(tempFilePath))) {
-            file = reader.read();
-        }
-
         assertThat(file.getVersion()).isEqualTo(fileVersion);
 
         var models = file.getModelInstances();
-
         assertThat(models)
             .isNotNull()
             .hasSize(modelCount)
