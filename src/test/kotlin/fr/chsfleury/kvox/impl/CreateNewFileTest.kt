@@ -54,16 +54,10 @@ class CreateNewFileTest {
         val model = VoxXYZIChunk(voxels)
 
         // The following chunks are the necessary containers for our model:
-
-        // The following chunks are the necessary containers for our model:
-        val groupTransform = VoxTransformChunk(0)
-
-        val shapeTransform = VoxTransformChunk(2)
         val shape = VoxShapeChunk(3, listOf(0)) // id of the 1st model
-
-        shapeTransform.childNodeId = shape.id
+        val shapeTransform = VoxTransformChunk(2, shape.id)
         val group = VoxGroupChunk(1, listOf(shapeTransform.id))
-        groupTransform.childNodeId = group.id
+        val groupTransform = VoxTransformChunk(0, group.id)
 
         // Assemble all our chunks under the root chunk.
         // The order of chunks is important.

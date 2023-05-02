@@ -10,11 +10,10 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxTransformChunk(
-    val id: Int
+    val id: Int,
+    val childNodeId: Int,
+    val transform: Vec3 = Vec3()
 ): VoxChunk(ChunkFactory.nTRN) {
-
-    var childNodeId = 0
-    var transform = Vec3()
 
     companion object {
         private val SPACE_REGEX = Regex(" ")
@@ -22,16 +21,16 @@ class VoxTransformChunk(
         @Throws(IOException::class)
         fun read(stream: InputStream): VoxTransformChunk {
             val id = stream.readIntLittleEndian()
-            val chunk = VoxTransformChunk(id)
-            val dict = stream.readDictionary()
-            chunk.childNodeId = stream.readIntLittleEndian()
+            stream.readDictionary() // ignored
+            val childNodeId = stream.readIntLittleEndian()
             val neg1 = stream.readIntLittleEndian()
             if (neg1 != -1) {
                 throw RuntimeException("neg1 checksum failed")
             }
-            val layerId = stream.readIntLittleEndian()
+            stream.readIntLittleEndian() // ignored layerId
             val numFrames = stream.readIntLittleEndian()
 
+            var transform = Vec3()
             // Rotation
             for (i in 0 until numFrames) {
                 val rot = stream.readDictionary()
@@ -41,11 +40,10 @@ class VoxTransformChunk(
                         .dropLastWhile { it.isEmpty() }
                         .toTypedArray()
 
-                    val tmp = Vec3(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt())
-                    chunk.transform.set(tmp.x, tmp.y, tmp.z)
+                    transform = Vec3(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt())
                 }
             }
-            return chunk
+            return VoxTransformChunk(id, childNodeId, transform)
         }
 
     }
