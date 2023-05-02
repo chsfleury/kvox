@@ -11,6 +11,7 @@ class VoxShapeChunk(
     val id: Int,
     val modelIds: List<Int>
 ): VoxChunk(ChunkFactory.nSHP) {
+    constructor(id: Int, numModels: Int, init: (Int) -> Int) : this(id, List(numModels, init))
 
     companion object {
 
@@ -19,12 +20,11 @@ class VoxShapeChunk(
             val id = stream.readIntLittleEndian()
             stream.readDictionary()
             val numModels = stream.readIntLittleEndian()
-            val modelIds = List(numModels) {
+            return VoxShapeChunk(id, numModels) {
                 stream.readIntLittleEndian().also {
-                    stream.readDictionary()
+                    stream.readDictionary() // ignored
                 }
             }
-            return VoxShapeChunk(id, modelIds)
         }
 
     }
