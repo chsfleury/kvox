@@ -9,7 +9,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
+class VoxRootChunk(chunks: Iterable<VoxChunk>): VoxChunk(ChunkFactory.MAIN) {
+    constructor(vararg chunks: VoxChunk) : this(chunks.asIterable())
 
     private val models = mutableMapOf<Int, VoxModelBlueprint>()
     private val chunkModelInstances = mutableListOf<VoxModelInstance>()
@@ -33,11 +34,15 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     private var size: Vec3? = null
     private val children: MutableList<VoxChunk> = mutableListOf()
 
+    init {
+        chunks.forEach(::append)
+    }
+
     companion object {
 
         @Throws(IOException::class)
         fun read(childrenStream: InputStream): VoxRootChunk {
-            val root = VoxRootChunk()
+            val children = mutableListOf<VoxChunk>()
             var first = readChunk(childrenStream)
             if (first is VoxPackChunk) {
                 first = null
@@ -53,25 +58,24 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
                     chunk1 = readChunk(childrenStream)
                 }
                 if (chunk1 != null) {
-                    root.appendChunk(chunk1)
+                    children += chunk1
                 }
                 if (chunk1 is VoxSizeChunk) {
                     val chunk2 = readChunk(childrenStream, ChunkFactory.XYZI)
                     if (chunk2 != null) {
-                        root.appendChunk(chunk2)
+                        children += chunk2
                     }
                 }
             }
 
             // Calc world offset by iterating through the scenegraph
-            root.iterateThruScenegraph()
-            return root
+            return VoxRootChunk(children)
+                .apply { iterateThruSceneGraph() }
         }
 
     }
 
-
-    fun appendChunk(chunk: VoxChunk) {
+    private fun append(chunk: VoxChunk) = apply {
         children.add(chunk)
         when (chunk) {
             is VoxSizeChunk -> {
@@ -126,7 +130,6 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
         return offset
     }
 
-
     private fun findTransformParent(transformId: Int): Vec3 {
         val offset = Vec3(0, 0, 0)
         for (groupChunk in groupChunks.values) {
@@ -139,15 +142,16 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
         return offset
     }
 
-    private fun iterateThruScenegraph() {
-        findTransformParent(rootTransform!!.id)
-        processTransformChunk(rootTransform, rootTransform!!.transform)
+    private fun iterateThruSceneGraph() {
+        val rTransform = rootTransform!!
+        findTransformParent(rTransform.id)
+        processTransformChunk(rTransform, rTransform.transform)
     }
 
 
-    private fun processTransformChunk(transformChunk: VoxTransformChunk?, pos: Vec3) {
+    private fun processTransformChunk(transformChunk: VoxTransformChunk, pos: Vec3) {
         val newPos = Vec3(pos)
-        if (groupChunks.containsKey(transformChunk!!.childNodeId)) {
+        if (groupChunks.containsKey(transformChunk.childNodeId)) {
             processGroupChunk(groupChunks[transformChunk.childNodeId]!!, newPos)
         } else if (shapeChunks.containsKey(transformChunk.childNodeId)) {
             processShapeChunk(shapeChunks[transformChunk.childNodeId]!!, newPos)

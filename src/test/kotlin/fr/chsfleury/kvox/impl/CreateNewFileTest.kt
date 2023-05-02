@@ -64,14 +64,16 @@ class CreateNewFileTest {
 
         // Assemble all our chunks under the root chunk.
         // The order of chunks is important.
-        val root = VoxRootChunk()
-        root.appendChunk(size)
-        root.appendChunk(model)
-        root.appendChunk(groupTransform)
-        root.appendChunk(group)
-        root.appendChunk(shapeTransform)
-        root.appendChunk(shape)
-        root.appendChunk(palette)
+        val root = VoxRootChunk(
+            size,
+            model,
+            groupTransform,
+            group,
+            shapeTransform,
+            shape,
+            palette
+        )
+
         val voxFile = DefaultVoxFile(VLVoxWriter.VERSION, root)
 
         // Write out the file.
