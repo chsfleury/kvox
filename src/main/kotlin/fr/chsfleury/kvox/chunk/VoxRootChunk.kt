@@ -73,7 +73,7 @@ class VoxRootChunk: VoxChunk(ChunkFactory.MAIN) {
     }
 
 
-    private fun appendChunk(chunk: VoxChunk) {
+    fun appendChunk(chunk: VoxChunk) {
         children.add(chunk)
         when (chunk) {
             is VoxSizeChunk -> {

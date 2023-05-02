@@ -6,7 +6,7 @@ class VoxOldMaterial (
     val id: Int,
     private val weight: Float = 0f,
     private val type: VoxOldMaterialType,
-    private val properties: Map<VoxOldMaterialProperty, Float?>,
+    private val properties: Map<VoxOldMaterialProperty, Float>,
     private val isTotalPower: Boolean = false
 ) {
     init {

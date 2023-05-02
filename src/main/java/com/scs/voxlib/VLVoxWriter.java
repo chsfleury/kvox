@@ -1,11 +1,13 @@
 package com.scs.voxlib;
 
+import fr.chsfleury.kvox.VoxWriter;
+
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class VLVoxWriter implements Closeable {
+public class VLVoxWriter implements VoxWriter<VLVoxFile> {
     public static final int VERSION = 150;
 
     private final DataOutputStream stream;
