@@ -9,7 +9,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxLayerChunk(val id: Int): VoxChunk(ChunkFactory.LAYR) {
-    private var transform = Vec3()
+    private var transform = Vec3.ORIGIN
 
     companion object {
 

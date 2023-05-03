@@ -119,27 +119,21 @@ class VoxRootChunk(chunks: Iterable<VoxChunk>): VoxChunk(ChunkFactory.MAIN) {
     }
 
     private fun findShapeOrGroupParent(shapeId: Int): Vec3 {
-        val offset = Vec3(0, 0, 0)
         for (transformChunk in transformChunks.values) {
             if (transformChunk.childNodeId == shapeId) {
-                offset.add(transformChunk.transform)
-                offset.add(findTransformParent(transformChunk.id))
-                break
+                return transformChunk.transform + findTransformParent(transformChunk.id)
             }
         }
-        return offset
+        return Vec3.ORIGIN
     }
 
     private fun findTransformParent(transformId: Int): Vec3 {
-        val offset = Vec3(0, 0, 0)
         for (groupChunk in groupChunks.values) {
             if (groupChunk.childIds.contains(transformId)) {
-                val subOffset = findShapeOrGroupParent(groupChunk.id)
-                offset.add(subOffset)
-                break
+                return findShapeOrGroupParent(groupChunk.id)
             }
         }
-        return offset
+        return Vec3.ORIGIN
     }
 
     private fun iterateThruSceneGraph() {
@@ -150,31 +144,28 @@ class VoxRootChunk(chunks: Iterable<VoxChunk>): VoxChunk(ChunkFactory.MAIN) {
 
 
     private fun processTransformChunk(transformChunk: VoxTransformChunk, pos: Vec3) {
-        val newPos = Vec3(pos)
         if (groupChunks.containsKey(transformChunk.childNodeId)) {
-            processGroupChunk(groupChunks[transformChunk.childNodeId]!!, newPos)
+            processGroupChunk(groupChunks[transformChunk.childNodeId]!!, pos)
         } else if (shapeChunks.containsKey(transformChunk.childNodeId)) {
-            processShapeChunk(shapeChunks[transformChunk.childNodeId]!!, newPos)
+            processShapeChunk(shapeChunks[transformChunk.childNodeId]!!, pos)
         }
     }
 
 
     private fun processGroupChunk(groupChunk: VoxGroupChunk, pos: Vec3) {
         for (childId in groupChunk.childIds) {
-            val trn = transformChunks[childId]
-            val newPos = Vec3(pos)
-            newPos.add(trn!!.transform)
-            processTransformChunk(trn, newPos)
+            val transformChunk = transformChunks[childId]
+                ?: throw IllegalStateException("child chunk $childId not found")
+            processTransformChunk(transformChunk, pos + transformChunk.transform)
         }
     }
 
 
     private fun processShapeChunk(shapeChunk: VoxShapeChunk, pos: Vec3) {
         for (modelId in shapeChunk.modelIds) {
-            val model = models[modelId]
-            if (model!!.voxels.isNotEmpty()) {
-                val instance = VoxModelInstance(model, Vec3(pos))
-                chunkModelInstances.add(instance)
+            val model = models[modelId] ?: throw IllegalStateException("model $modelId not found")
+            if (model.voxels.isNotEmpty()) {
+                chunkModelInstances += VoxModelInstance(model, pos)
             }
         }
     }

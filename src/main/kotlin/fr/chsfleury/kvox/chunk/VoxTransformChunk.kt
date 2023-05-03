@@ -12,7 +12,7 @@ import java.io.OutputStream
 class VoxTransformChunk(
     val id: Int,
     val childNodeId: Int,
-    val transform: Vec3 = Vec3()
+    val transform: Vec3 = Vec3.ORIGIN
 ): VoxChunk(ChunkFactory.nTRN) {
 
     companion object {
@@ -30,7 +30,7 @@ class VoxTransformChunk(
             stream.readIntLittleEndian() // ignored layerId
             val numFrames = stream.readIntLittleEndian()
 
-            var transform = Vec3()
+            var transform = Vec3.ORIGIN
             // Rotation
             for (i in 0 until numFrames) {
                 val rot = stream.readDictionary()
