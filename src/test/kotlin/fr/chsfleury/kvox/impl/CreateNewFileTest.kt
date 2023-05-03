@@ -23,19 +23,14 @@ class CreateNewFileTest {
     @Test
     @Throws(IOException::class)
     fun testCreateNewFile() {
-        // Set size of the model
 
         // Set size of the model
         val size = VoxSizeChunk(3, 3, 3)
 
         // Color indices that we'll use. Must be between 1..255.
-
-        // Color indices that we'll use. Must be between 1..255.
         val ID_GREEN: Byte = 1
         val ID_YELLOW: Byte = 2
         val ID_RED: Byte = 3
-
-        // Set actual ARGB values for our color indices.
 
         // Set actual ARGB values for our color indices.
         val paletteArray = IntArray(4)
@@ -44,7 +39,6 @@ class CreateNewFileTest {
         paletteArray[ID_RED.toInt()] = -0x33cccd
         val palette = VoxRGBAChunk(paletteArray)
 
-        // Set voxels using the color indices.
 
         // Set voxels using the color indices.
         val voxels = mutableListOf<Voxel>()
@@ -61,9 +55,6 @@ class CreateNewFileTest {
 
         // Assemble all our chunks under the root chunk.
         // The order of chunks is important.
-
-        // Assemble all our chunks under the root chunk.
-        // The order of chunks is important.
         val root = VoxRootChunk(
             size,
             model,
@@ -75,8 +66,6 @@ class CreateNewFileTest {
         )
 
         val voxFile = DefaultVoxFile(VLVoxWriter.VERSION, root)
-
-        // Write out the file.
 
         // Write out the file.
         val path = Paths.get("target/test_file.vox")
