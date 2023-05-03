@@ -1,5 +1,6 @@
 package fr.chsfleury.kvox.chunk
 
+import fr.chsfleury.kvox.ColorPalette
 import fr.chsfleury.kvox.Vec3
 import fr.chsfleury.kvox.VoxModelBlueprint
 import fr.chsfleury.kvox.VoxModelInstance
@@ -14,7 +15,7 @@ class VoxRootChunk(chunks: Iterable<VoxChunk>): VoxChunk(ChunkFactory.MAIN) {
 
     private val models = mutableMapOf<Int, VoxModelBlueprint>()
     private val chunkModelInstances = mutableListOf<VoxModelInstance>()
-    private var chunkPalette: IntArray = VoxRGBAChunk.DEFAULT_PALETTE
+    private var chunkPalette: IntArray = ColorPalette.DEFAULT_PALETTE
     private val chunkMaterials = mutableMapOf<Int, VoxMaterial>()
     private val oldMaterials = mutableMapOf<Int, VoxOldMaterial>()
     private val shapeChunks = mutableMapOf<Int, VoxShapeChunk>()
