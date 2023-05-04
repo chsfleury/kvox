@@ -36,4 +36,8 @@ class VoxGroupChunk(
             stream.writeIntLittleEndian(childId)
         }
     }
+
+    override fun toString(): String {
+        return "Group#${id}_children_" + childIds.joinToString("_")
+    }
 }

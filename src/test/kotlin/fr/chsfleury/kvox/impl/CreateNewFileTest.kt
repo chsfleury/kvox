@@ -1,6 +1,7 @@
 package fr.chsfleury.kvox.impl
 
-import com.scs.voxlib.VLVoxWriter
+import fr.chsfleury.kvox.ColorARGB
+import fr.chsfleury.kvox.Vec3
 import fr.chsfleury.kvox.Voxel
 import fr.chsfleury.kvox.chunk.VoxGroupChunk
 import fr.chsfleury.kvox.chunk.VoxRGBAChunk
@@ -25,47 +26,59 @@ class CreateNewFileTest {
     fun testCreateNewFile() {
 
         // Set size of the model
-        val size = VoxSizeChunk(3, 3, 3)
+        val sizeChunk = VoxSizeChunk(3, 3, 8)
 
-        // Color indices that we'll use. Must be between 1..255.
-        val ID_GREEN: Byte = 1
-        val ID_YELLOW: Byte = 2
-        val ID_RED: Byte = 3
+        val green = ColorARGB.of(-0xcc33cd)
+        val yellow = ColorARGB.of(-0x3333cd)
+        val red = ColorARGB.of(-0x33cccd)
+        val blue = ColorARGB(0, 0, 255, 64)
+        val colorPalette = MutableColorPalette(
+            green,
+            yellow,
+            red,
+            blue
+        )
 
-        // Set actual ARGB values for our color indices.
-        val paletteArray = IntArray(4)
-        paletteArray[ID_GREEN.toInt()] = -0xcc33cd
-        paletteArray[ID_YELLOW.toInt()] = -0x3333cd
-        paletteArray[ID_RED.toInt()] = -0x33cccd
-        val palette = VoxRGBAChunk(paletteArray)
+        val palette = VoxRGBAChunk(colorPalette)
 
 
         // Set voxels using the color indices.
         val voxels = mutableListOf<Voxel>()
-        voxels.add(Voxel(1, 1, 0, ID_GREEN))
-        voxels.add(Voxel(1, 1, 1, ID_YELLOW))
-        voxels.add(Voxel(1, 1, 2, ID_RED))
+        voxels.add(Voxel(1, 1, 0, colorPalette[green]))
+        voxels.add(Voxel(1, 1, 1, colorPalette[yellow]))
+        voxels.add(Voxel(1, 1, 2, colorPalette[red]))
+        voxels.add(Voxel(1, 1, 3, colorPalette[blue]))
+        voxels.add(Voxel(1, 1, 4, colorPalette[red]))
+        voxels.add(Voxel(1, 1, 5, colorPalette[yellow]))
+        voxels.add(Voxel(1, 1, 6, colorPalette[red]))
+        voxels.add(Voxel(1, 1, 7, colorPalette[blue]))
         val model = VoxXYZIChunk(voxels)
 
         // The following chunks are the necessary containers for our model:
         val shape = VoxShapeChunk(3, listOf(0)) // id of the 1st model
-        val shapeTransform = VoxTransformChunk(2, shape.id)
-        val group = VoxGroupChunk(1, listOf(shapeTransform.id))
+        val shapeTransform = VoxTransformChunk(2, shape.id, Vec3(0, 0, sizeChunk.size.z / 2))
+
+        val shape2 = VoxShapeChunk(5, listOf(0)) // id of the 1st model
+        val shapeTransform2 = VoxTransformChunk(4, shape2.id, Vec3(2, 0, sizeChunk.size.z / 2))
+
+        val group = VoxGroupChunk(1, listOf(shapeTransform.id, shapeTransform2.id))
         val groupTransform = VoxTransformChunk(0, group.id)
 
         // Assemble all our chunks under the root chunk.
         // The order of chunks is important.
         val root = VoxRootChunk(
-            size,
+            sizeChunk,
             model,
             groupTransform,
             group,
             shapeTransform,
             shape,
+            shapeTransform2,
+            shape2,
             palette
         )
 
-        val voxFile = DefaultVoxFile(VLVoxWriter.VERSION, root)
+        val voxFile = DefaultVoxFile(DefaultVoxReader.VOX_FORMAT_VERSION, root)
 
         // Write out the file.
         val path = Paths.get("target/test_file.vox")

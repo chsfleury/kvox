@@ -41,4 +41,8 @@ class VoxShapeChunk(
                 .writeIntLittleEndian(0)
         }
     }
+
+    override fun toString(): String {
+        return "Shape#${id}_models_" + modelIds.joinToString("_")
+    }
 }

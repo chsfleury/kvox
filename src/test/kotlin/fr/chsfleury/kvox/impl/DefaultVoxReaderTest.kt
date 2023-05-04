@@ -1,5 +1,6 @@
 package fr.chsfleury.kvox.impl
 
+import fr.chsfleury.kvox.JsonDebug
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.FileInputStream
@@ -18,9 +19,12 @@ class DefaultVoxReaderTest {
     }
 
     @Throws(IOException::class)
-    private fun testModel(path: String, fileVersion: Int, modelCount: Int, voxelCount: Int, materialCount: Int) {
+    private fun testModel(path: String, fileVersion: Int, modelCount: Int, voxelCount: Int, materialCount: Int, debug: Boolean = false) {
         val file = loadVox(path)
         assertThat(file!!.version).isEqualTo(fileVersion)
+        if (debug) {
+            JsonDebug.debug(file)
+        }
         val models = file.modelInstances
         assertThat(models)
             .isNotNull()
@@ -45,7 +49,7 @@ class DefaultVoxReaderTest {
     @Test
     @Throws(IOException::class)
     fun testChrKnight() {
-        testModel("/chr_knight.vox", 150, 1, 398, 256)
+        testModel("/chr_knight.vox", 150, 1, 398, 256, true)
     }
 
     @Test

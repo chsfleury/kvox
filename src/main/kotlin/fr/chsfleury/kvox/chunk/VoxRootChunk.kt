@@ -11,7 +11,9 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VoxRootChunk(chunks: Iterable<VoxChunk>): VoxChunk(ChunkFactory.MAIN) {
-    constructor(vararg chunks: VoxChunk) : this(chunks.asIterable())
+    constructor(vararg chunks: VoxChunk) : this(chunks.asIterable()) {
+        iterateThruSceneGraph()
+    }
 
     private val models = mutableMapOf<Int, VoxModelBlueprint>()
     private val chunkModelInstances = mutableListOf<VoxModelInstance>()

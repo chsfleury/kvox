@@ -22,4 +22,8 @@ class VoxSizeChunk(val size: Vec3): VoxChunk(ChunkFactory.SIZE) {
     override fun writeContent(stream: OutputStream) {
         stream.writeVector3i(size)
     }
+
+    override fun toString(): String {
+        return "Size_$size"
+    }
 }

@@ -46,6 +46,6 @@ class MutableColorPalette(
         palette[index] = color.toInt()
     }
 
-    operator fun get(index: Int): ColorARGB? = colors[index]
-    operator fun get(color: ColorARGB): Int? = reverseColors[color]
+    operator fun get(index: Int): ColorARGB = colors[index] ?: throw IllegalArgumentException("color index not found")
+    operator fun get(color: ColorARGB): Int = reverseColors[color] ?: throw IllegalArgumentException("color not found")
 }

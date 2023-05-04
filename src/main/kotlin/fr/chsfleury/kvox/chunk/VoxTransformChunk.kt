@@ -49,7 +49,7 @@ class VoxTransformChunk(
     }
 
     override fun toString(): String {
-        return "VoxTransformChunk#" + id + "_" + transform
+        return "Transform#" + id + "_" + transform
     }
 
     @Throws(IOException::class)

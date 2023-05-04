@@ -1,5 +1,7 @@
 package fr.chsfleury.kvox.chunk
 
+import fr.chsfleury.kvox.ColorPalette
+import fr.chsfleury.kvox.impl.IntArrayColorPalette
 import fr.chsfleury.kvox.utils.IntBytes
 import fr.chsfleury.kvox.utils.StreamUtils.readIntLittleEndian
 import fr.chsfleury.kvox.utils.StreamUtils.writeIntLittleEndian
@@ -7,37 +9,14 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-class VoxRGBAChunk(
-    initialPalette: IntArray? = null
-): VoxChunk(ChunkFactory.RGBA) {
+class VoxRGBAChunk(private val colorPalette: ColorPalette): VoxChunk(ChunkFactory.RGBA) {
 
-    /**
-     * The returned colour integers are in the ARGB format, i.e.
-     * the highest 8 bits represent the Alpha channel, and
-     * the lowest 8 bits represent the blue channel.
-     * Valid indices are from 1 to 255; 0 is not used.
-     */
-    val palette = IntArray(256)
-
-    /**
-     * The provided colour integers must be in the ARGB format, i.e.
-     * the highest 8 bits represent the Alpha channel, and
-     * the lowest 8 bits represent the blue channel.
-     * Valid indices are from 1 to 255; 0 is not used.
-     */
-    init {
-        if (initialPalette != null) {
-            var i = 1
-            while (i < 256 && i < initialPalette.size) {
-                this.palette[i] = initialPalette[i++]
-            }
-        }
-    }
+    val palette: IntArray get() = colorPalette.palette
 
     @Throws(IOException::class)
     override fun writeContent(stream: OutputStream) {
         for (i in 1..255) {
-            stream.writeIntLittleEndian(convertARGBToABGR(palette[i]))
+            stream.writeIntLittleEndian(convertARGBToABGR(colorPalette.palette[i]))
         }
     }
 
@@ -49,7 +28,7 @@ class VoxRGBAChunk(
                 if (index == 0) 0
                 else convertABGRToARGB(stream.readIntLittleEndian())
             }
-            return VoxRGBAChunk(palette)
+            return VoxRGBAChunk(IntArrayColorPalette(palette))
         }
 
         private fun convertABGRToARGB(abgr: Int): Int {

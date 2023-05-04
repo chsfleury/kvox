@@ -38,4 +38,8 @@ class VoxXYZIChunk(
         }
     }
 
+    override fun toString(): String {
+        return "XYZI_numVoxels_${voxels.size}"
+    }
+
 }

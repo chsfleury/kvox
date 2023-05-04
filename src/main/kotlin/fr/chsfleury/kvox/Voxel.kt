@@ -7,6 +7,7 @@ class Voxel(
     val colourIndex: Byte
 ) {
     constructor(x: Int, y: Int, z: Int, colourIndex: Byte) : this(Vec3(x, y, z), colourIndex)
+    constructor(x: Int, y: Int, z: Int, colourIndex: Int) : this(x, y, z, colourIndex.toByte())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
